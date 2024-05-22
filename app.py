@@ -31,7 +31,7 @@ def handle_message(event):
 
     response = openai.Completion.create(
         model='gpt-3.5-turbo-instruct',
-        prompt = user_message,
+        prompt = f"請用繁體中文回答問題：\n{user_message}",
         max_tokens = 150
     )
 
