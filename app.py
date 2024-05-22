@@ -30,8 +30,9 @@ def handle_message(event):
     user_message = event.message.text
 
     response = openai.Completion.create(
-        model='gpt-3.5-turbo-instruct',
+        model='gpt-4o',
         prompt = f"請用繁體中文回答問題：\n{user_message}",
+        temperature = 0.5,
         max_tokens = 150
     )
 
