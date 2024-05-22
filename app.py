@@ -30,7 +30,7 @@ def handle_message(event):
     user_message = event.message.text
 
     response = openai.Completion.create(
-        model='text-davinci-003',
+        model='gpt-3.5-turbo-instruct',
         prompt = user_message,
         max_tokens = 150
     )
