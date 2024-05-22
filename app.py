@@ -3,13 +3,13 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
 import os
-#import openai
+import openai
 
 app = Flask(__name__)
 
 line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
-#openai.api_key = os.environ['OPENAI_SECRET']
+openai.api_key = os.environ['OPENAI_SECRET']
 
 
 @app.route("/callback", methods=['POST'])
@@ -25,23 +25,23 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message = TextSendMessage(text=event.message.text)
-    line_bot_api.reply_message(event.reply_token, message)
-    # user_message = event.message.text
-
-    # response = openai.Completion.create(
-    #     model='text-davinci-003',
-    #     prompt = user_message,
-    #     max_tokens = 150
-    # )
-
-    # gpt_reply = response.choices[0].text.strip()
-
-    # # Create a TextSendMessage object with the response
-    # message = TextSendMessage(text=gpt_reply)
-
-    # # Reply to the user
+    # message = TextSendMessage(text=event.message.text)
     # line_bot_api.reply_message(event.reply_token, message)
+    user_message = event.message.text
+
+    response = openai.Completion.create(
+        model='text-davinci-003',
+        prompt = user_message,
+        max_tokens = 150
+    )
+
+    gpt_reply = response.choices[0].text.strip()
+
+    # Create a TextSendMessage object with the response
+    message = TextSendMessage(text=gpt_reply)
+
+    # Reply to the user
+    line_bot_api.reply_message(event.reply_token, message)
 
 import os
 if __name__ == "__main__":
