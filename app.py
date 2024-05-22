@@ -7,8 +7,8 @@ import openai
 
 app = Flask(__name__)
 
-line_bot_api = LineBotApi(os.getenv('CHANNER_ACCESS_TOKEN'))
-handler = WebhookHandler(os.getenv('CHANNER_SECRET'))
+line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
+handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
 
@@ -28,7 +28,7 @@ def handle_message(event):
     # message = TextSendMessage(text=event.message.text)
     # line_bot_api.reply_message(event.reply_token, message)
     user_message = event.message.text
-    
+
     response = openai.Completion.create(
         model='text-davinci-003',
         prompt = user_message,
