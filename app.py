@@ -31,7 +31,9 @@ def handle_message(event):
     # line_bot_api.reply_message(event.reply_token, message)
     user_message = event.message.text
 
-    response = OpenAI.completions.create(
+    client = OpenAI()
+
+    response = client.completions.create(
         model='text-davinci-003',
         prompt = user_message,
         max_tokens = 150
