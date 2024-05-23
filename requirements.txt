@@ -2,5 +2,5 @@ line-bot-sdk==2.3.0
 flask==2.1.2
 requests==2.28.0
 Werkzeug==2.2.2
-openai==0.28
+openai
 Gunicorn
