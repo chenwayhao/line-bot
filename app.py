@@ -37,7 +37,7 @@ def handle_message(event):
     )
 
     
-    gpt_reply1 = response.choices[0].text.strip()
+    gpt_reply1 = response.choices[0]['text'].strip()
     gpt_reply = response.choices[0]['text'].replace('。','')
     print(gpt_reply1)
     # Create a TextSendMessage object with the response
