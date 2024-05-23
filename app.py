@@ -3,8 +3,7 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
 import os
-#import openai
-from openai import OpenAI
+import openai
 
 
 app = Flask(__name__)
@@ -42,12 +41,11 @@ def handle_message(event):
     # gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
 
 
-    client = OpenAI()
-    response = client.chat.completions.create(
+    response = openai.ChatCompletions.create(
         model = 'gpt-3.5-turbo',
         prompt = user_message,
         temperature = 0.5,
-        max_tokens = 250
+        max_tokens = 250    
     )
 
     gpt_reply = response.choices[0]['text']
