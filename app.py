@@ -46,8 +46,8 @@ def handle_message(event):
         max_tokens = 150
     )
 
-    
-    gpt_reply1 = response.choices[0]['message']['content'].strip()
+    gpt_reply1 = response.choices
+    # gpt_reply1 = response.choices[0]['message']['content'].strip()
     # gpt_reply = response.choices[0]['text'].replace('。','').strip()
     gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
     print(gpt_reply1)
