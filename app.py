@@ -29,16 +29,17 @@ def handle_message(event):
     # line_bot_api.reply_message(event.reply_token, message)
     user_message = event.message.text
 
-    response = openai.ChatCompletion.create(
-        model='gpt-4',
-        messages = [{"role":"user","content":user_message}],
-        temperature = 0.5,
-        max_tokens = 150
-    )
-    # gpt4 version  
-    gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
 
-    response = openai.chat.completion.create(
+    # gpt4 version  
+    # response = openai.ChatCompletion.create(
+    #     model='gpt-4',
+    #     messages = [{"role":"user","content":user_message}],
+    #     temperature = 0.5,
+    #     max_tokens = 150
+    # )
+    # gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
+
+    response = openai.completion.create(
         model = 'gpt-3.5-turbo-instruct',
         prompt = user_message,
         temperature = 0.5,
