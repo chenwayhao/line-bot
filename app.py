@@ -41,7 +41,7 @@ def handle_message(event):
 
     response = openai.ChatCompletion.create(
         model='gpt-4',
-        message = [{"role":"user","content":user_message}],
+        messages = [{"role":"user","content":user_message}],
         temperature = 0.5,
         max_tokens = 150
     )
