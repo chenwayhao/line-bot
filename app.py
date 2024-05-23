@@ -3,17 +3,17 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
 import os
-#import openai
-from openai import OpenAI 
+import openai
+#from openai import OpenAI 
 
 app = Flask(__name__)
 
 line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
 handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
-#openai.api_key = os.getenv('OPENAI_API_KEY')
-client = OpenAI(
-    api_key = os.getenv('OPENAI_API_KEY'),
-)
+openai.api_key = os.getenv('OPENAI_API_KEY')
+# client = OpenAI(
+#     api_key = os.getenv('OPENAI_API_KEY'),
+# )
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -39,16 +39,17 @@ def handle_message(event):
     #     max_tokens = 150
     # )
 
-    response = client.chat.completions.create(
-        model='gpt-4o',
-        prompt = user_message,
+    response = openai.ChatCompletion.create(
+        model='gpt-4',
+        message = [{"role":"user","content":user_message}],
         temperature = 0.5,
         max_tokens = 150
     )
 
     
     gpt_reply1 = response.choices[0]['text'].strip()
-    gpt_reply = response.choices[0]['text'].replace('。','').strip()
+    # gpt_reply = response.choices[0]['text'].replace('。','').strip()
+    gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
     print(gpt_reply1)
     # Create a TextSendMessage object with the response
     message = TextSendMessage(text=gpt_reply)
