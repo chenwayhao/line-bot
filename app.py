@@ -46,6 +46,7 @@ def handle_message(event):
         max_tokens = 250
     )
 
+    gpt_reply = response.choices[0]['text']
 
 
     gpt_reply1 = response.choices
