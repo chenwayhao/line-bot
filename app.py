@@ -40,7 +40,7 @@ def handle_message(event):
     # gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
 
     response = openai.Completion.create(
-        model = 'gpt-3.5-turbo-instruct',
+        model = 'gpt-3.5-turbo',
         prompt = user_message,
         temperature = 0.5,
         max_tokens = 250
