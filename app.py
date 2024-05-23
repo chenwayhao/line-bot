@@ -43,7 +43,7 @@ def handle_message(event):
 
     response = openai.ChatCompletion.create(
         model = 'gpt-3.5-turbo',
-        prompt = user_message,
+        messages = user_message,
         temperature = 0.5,
         max_tokens = 250    
     )
