@@ -39,7 +39,7 @@ def handle_message(event):
     #     max_tokens = 150
     # )
 
-    response = client.completions.create(
+    response = client.chat.completions.create(
         model='gpt-4o',
         prompt = user_message,
         temperature = 0.5,
