@@ -41,7 +41,7 @@ def handle_message(event):
     # gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
 
 
-    response = openai.ChatCompletions.create(
+    response = openai.ChatCompletion.create(
         model = 'gpt-3.5-turbo',
         prompt = user_message,
         temperature = 0.5,
