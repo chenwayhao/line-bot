@@ -3,13 +3,15 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
 import os
-import openai 
+#import openai
+from openai import OpenAI 
 
 app = Flask(__name__)
 
 line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
 handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
-openai.api_key = os.getenv('OPENAI_API_KEY')
+client = 
+#openai.api_key = os.getenv('OPENAI_API_KEY')
 
 
 @app.route("/callback", methods=['POST'])
@@ -30,7 +32,7 @@ def handle_message(event):
     user_message = event.message.text
 
     response = openai.Completion.create(
-        model='gpt-3.5-turbo-instruct',
+        model='gpt-4o',
         prompt = user_message,
         temperature = 0.5,
         max_tokens = 150
