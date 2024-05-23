@@ -42,13 +42,13 @@ def handle_message(event):
 
 
     response = openai.ChatCompletion.create(
-        model = 'gpt-3.5-turbo',
+        model = 'gpt-3.5-turbo-0125',
         messages = [{"role":"user","content":user_message}],
         temperature = 0.5,
         max_tokens = 250    
     )
 
-    gpt_reply = response.choices[0]['messages']['content'].replace('。','').strip()
+    gpt_reply = response.choices[0]['text']
 
 
     gpt_reply1 = response.choices
