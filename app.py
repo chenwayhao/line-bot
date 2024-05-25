@@ -41,23 +41,34 @@ def handle_message(event):
     # gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
 
 
-    response = openai.ChatCompletion.create(
-        model = 'gpt-3.5-turbo-0125',
-        messages = [{"role":"user","content":user_message}],
-        temperature = 0.5,
-        max_tokens = 250    
+    # response = openai.ChatCompletion.create(
+    #     model = 'gpt-3.5-turbo-0125',
+    #     messages = [{"role":"user","content":user_message}],
+    #     temperature = 0.5,
+    #     max_tokens = 250    
+    # )
+
+    # gpt_reply = response.choices[0]['message']['content']
+
+
+    # gpt_reply1 = response.choices
+    # print(gpt_reply1)
+    # # Create a TextSendMessage object with the response
+    # message = TextSendMessage(text=gpt_reply)
+
+    # # Reply to the user
+    # line_bot_api.reply_message(event.reply_token, message)
+
+@handler.add(MessageEvent, message=LocationMessage)
+def handle_location_message(event):
+    latitude = event.message.latitude
+    longitude = event.message.longitude
+
+    reply_text = f"您的位置是：\n緯度：{latitude}\n經度：{longitude}"
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=reply_text)
     )
-
-    gpt_reply = response.choices[0]['message']['content']
-
-
-    gpt_reply1 = response.choices
-    print(gpt_reply1)
-    # Create a TextSendMessage object with the response
-    message = TextSendMessage(text=gpt_reply)
-
-    # Reply to the user
-    line_bot_api.reply_message(event.reply_token, message)
 
 import os
 if __name__ == "__main__":
