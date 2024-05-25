@@ -24,11 +24,11 @@ def callback():
         abort(400)
     return 'OK'
 
-@handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
+# @handler.add(MessageEvent, message=TextMessage)
+# def handle_message(event):
     # message = TextSendMessage(text=event.message.text)
     # line_bot_api.reply_message(event.reply_token, message)
-    user_message = event.message.text
+    #user_message = event.message.text
 
 
     # gpt4 version  
@@ -58,6 +58,14 @@ def handle_message(event):
 
     # # Reply to the user
     # line_bot_api.reply_message(event.reply_token, message)
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    if event.message.text == '位置':
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="請傳送您的位置資訊")
+        )
+
 
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location_message(event):
@@ -65,10 +73,7 @@ def handle_location_message(event):
     longitude = event.message.longitude
 
     reply_text = f"您的位置是：\n緯度：{latitude}\n經度：{longitude}"
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=reply_text)
-    )
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
 
 import os
 if __name__ == "__main__":
