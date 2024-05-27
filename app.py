@@ -5,6 +5,7 @@ from linebot.models import *
 import os
 import openai
 import re 
+import random
 
 
 app = Flask(__name__)
