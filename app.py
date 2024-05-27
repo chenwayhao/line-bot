@@ -4,6 +4,7 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
 import os
 import openai
+import re 
 
 
 app = Flask(__name__)
@@ -24,92 +25,197 @@ def callback():
         abort(400)
     return 'OK'
 
+
+user_responses = {}
+# Handle postback events
+@handler.add(PostbackEvent)
+def handle_postback(event):
+    user_id = event.source.user_id
+    data = event.postback.data
+    # Log the response
+    if user_id not in user_responses:
+        user_responses[user_id] = {}
+    if 'action=' in data:
+        fortune = data.split('=')[1]
+        user_responses[user_id]['fortune'] = fortune
+
+# Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    # message = TextSendMessage(text=event.message.text)
-    # line_bot_api.reply_message(event.reply_token, message)
-    user_message = event.message.text
+    message = event.message.text
+    user_id = event.source.user_id
+    if re.match('告訴我秘密', message):
+        fortunes = ['大吉', '吉', '凶', '大凶']
+        random.shuffle(fortunes)
 
+        image_carousel_template_message = TemplateSendMessage(
+            alt_text='請抽籤',
+            template=ImageCarouselTemplate(
+                columns=[
+                    ImageCarouselColumn(
+                        image_url='https://i.imgur.com/W7nI6fg.jpg',
+                        action=PostbackAction(
+                            label='請抽我看看運勢',
+                            display_text='到底抽到什麼呢?',
+                            data=f'action={fortunes[0]}'
+                        )
+                    ),
+                    ImageCarouselColumn(
+                        image_url='https://i.imgur.com/W7nI6fg.jpg',
+                        action=PostbackAction(
+                            label='請抽我看看運勢',
+                            display_text='到底抽到什麼呢?',
+                            data=f'action={fortunes[1]}'
+                        )
+                    ),
+                    ImageCarouselColumn(
+                        image_url='https://i.imgur.com/W7nI6fg.jpg',
+                        action=PostbackAction(
+                            label='請抽我看看運勢',
+                            display_text='到底抽到什麼呢?',
+                            data=f'action={fortunes[2]}'
+                        )
+                    ),
+                    ImageCarouselColumn(
+                        image_url='https://i.imgur.com/W7nI6fg.jpg',
+                        action=PostbackAction(
+                            label='請抽我看看運勢',
+                            display_text='到底抽到什麼呢?',
+                            data=f'action={fortunes[3]}'
+                        )
+                    )
+                ]
+            )
+        )
+        buttons_template_message_weather = TemplateSendMessage(
+            alt_text='天氣調查',
+            template=ButtonsTemplate(
+                thumbnail_image_url='https://img.lovepik.com/png/20231015/Cartoon-image-thunderstorm-weather-raindrop-cartoon-images-lightning_215956_wh1200.png',
+                title='今日天氣你覺得如何?',
+                text='請選擇適合的形容詞',
+                actions=[
+                    MessageAction(
+                        label='悶熱',
+                        display_text='悶熱',
+                        text='今天確實很悶熱耶'
+                    ),
+                    MessageAction(
+                        label='濕冷',
+                        display_text='濕冷',
+                        text='今天確實很濕冷耶'
+                    ),
+                    MessageAction(
+                        label='溫暖',
+                        display_text='溫暖',
+                        text='今天確實很溫暖耶'
+                    ),
+                    MessageAction(
+                        label='涼爽',
+                        display_text='涼爽',
+                        text='今天確實很涼爽耶'
+                    )
+                ]
+            )
+        )
 
-    #gpt4 version  
+        buttons_template_message_mood = TemplateSendMessage(
+            alt_text='心情調查',
+            template=ButtonsTemplate(
+                thumbnail_image_url='https://www.mindfulness.com.tw/upfile/editor/images/8.png',
+                title='今日心情如何?',
+                text='請選擇適合的形容詞',
+                actions=[
+                    MessageAction(
+                        label='很好',
+                        display_text='GOOD',
+                        text='讚!'
+                    ),
+                    MessageAction(
+                        label='不好不壞',
+                        display_text='SOSO',
+                        text='讚!'
+                    ),
+                    MessageAction(
+                        label='很差',
+                        display_text='Bad',
+                        text='還好吧?'
+                    )
+                ]
+            )
+        )
+        # Reply with the image carousel template message first
+        line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
+        
+        # Then push the buttons template message
+        line_bot_api.push_message(user_id, buttons_template_message_weather)
+
+        # Then push the buttons template message
+        line_bot_api.push_message(user_id, buttons_template_message_mood)
+    else:
+        if message == "推薦":
+            recommendation = get_recommendation(user_id)
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
+        else:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
+
+def get_recommendation(user_id):
+    response = user_responses.get(user_id, {})
+    fortune = response.get('fortune', 'unknown')
+    weather = response.get('weather', 'unknown')
+    mood = response.get('mood', 'unknown')
+
+    # Generate a prompt for ChatGPT
+    prompt = (
+        f"基於以下條件，給出一個夜生活推薦：\n"
+        f"運勢：{fortune}\n"
+        f"天氣：{weather}\n"
+        f"心情：{mood}\n"
+        f"請給出一個適合的建議，要去哪裡度過夜生活，應該去酒吧喝酒、KTV唱歌還是去夜店嗨。"
+    )
+
+    # Call the OpenAI API to get a recommendation
+    # response = openai.Completion.create(
+    #     engine="davinci",
+    #     prompt=prompt,
+    #     max_tokens=50
+    # )
+
     response = openai.ChatCompletion.create(
         model='gpt-4',
-        messages = [{"role":"user","content":user_message}],
+        prompy = prompt,
         temperature = 0.5,
         max_tokens = 150
     )
-    gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
 
+    recommendation = response.choices[0]['message']['content'].replace('。','').strip()
+    return recommendation
 
-    # response = openai.ChatCompletion.create(
-    #     model = 'gpt-3.5-turbo-0125',
-    #     messages = [{"role":"user","content":user_message}],
-    #     temperature = 0.5,
-    #     max_tokens = 250    
-    # )
-
-    # gpt_reply = response.choices[0]['message']['content']
-
-
-    # gpt_reply1 = response.choices
-    # print(gpt_reply1)
-    #Create a TextSendMessage object with the response
-    message = TextSendMessage(text=gpt_reply)
-
-    # Reply to the user
-    line_bot_api.reply_message(event.reply_token, message)
 # @handler.add(MessageEvent, message=TextMessage)
 # def handle_message(event):
-#     if event.message.text == '位置':
-#         line_bot_api.reply_message(
-#             event.reply_token,
-#             TextSendMessage(text="請傳送您的位置資訊")
-#         )
+#     user_message = event.message.text
+#     #gpt4 version  
+#     response = openai.ChatCompletion.create(
+#         model='gpt-4',
+#         messages = [{"role":"user","content":user_message}],
+#         temperature = 0.5,
+#         max_tokens = 150
+#     )
+# #--------------------------------------------------------
+#     # response = openai.ChatCompletion.create(
+#     #     model = 'gpt-3.5-turbo-0125',
+#     #     messages = [{"role":"user","content":user_message}],
+#     #     temperature = 0.5,
+#     #     max_tokens = 250    
+#     # )
+# #--------------------------------------------------------
+#     gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
+#     gpt_reply1 = response.choices
+#     print(gpt_reply1)
+#     #Create a TextSendMessage object with the response
+#     message = TextSendMessage(text=gpt_reply)
 
-
-# @handler.add(MessageEvent, message=LocationMessage)
-# def handle_location_message(event):
-#     latitude = event.message.latitude
-#     longitude = event.message.longitude
-
-#     reply_text = f"您的位置是：\n緯度：{latitude}\n經度：{longitude}"
-#     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
-
-# @app.route("/richmenu", methods=['GET'])
-# def get_richmenu_list():
-#     # 獲取圖文選單列表
-#     rich_menu_list = line_bot_api.get_rich_menu_list()
-#     rich_menu_ids = [rich_menu.rich_menu_id for rich_menu in rich_menu_list]
-#     return {'rich_menu_ids': rich_menu_ids}, 200  # 返回圖文選單 ID 列表
-
-# @handler.add(PostbackEvent)
-# def handle_postback(event):
-#     # 處理圖文選單點擊事件
-#     if event.message.text == '鄰近店家':
-#         confirm_template = ConfirmTemplate(
-#             text='您要分享您的位置信息嗎？',
-#             actions=[
-#                 MessageAction(label='是', text='分享位置'),
-#                 MessageAction(label='否', text='取消')
-#             ]
-#         )
-#         template_message = TemplateSendMessage(
-#             alt_text='確認對話框',
-#             template=confirm_template
-#         )
-#         line_bot_api.reply_message(event.reply_token, template_message)
-
-# @handler.add(MessageEvent, message=LocationMessage)
-# def handle_location_message(event):
-#     # 處理用戶發送的位置信息
-#     latitude = event.message.latitude  # 獲取緯度
-#     longitude = event.message.longitude  # 獲取經度
-
-#     # 組合回應的文字信息，包含用戶的位置經緯度
-#     reply_text = f"您的位置是：\n緯度：{latitude}\n經度：{longitude}"
-#     # 回應用戶位置經緯度信息
-#     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
-
+#     # Reply to the user
+#     line_bot_api.reply_message(event.reply_token, message)
 
 
 import os
