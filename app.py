@@ -58,22 +58,59 @@ def callback():
 
     # # Reply to the user
     # line_bot_api.reply_message(event.reply_token, message)
-@handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    if event.message.text == '位置':
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="請傳送您的位置資訊")
-        )
+# @handler.add(MessageEvent, message=TextMessage)
+# def handle_message(event):
+#     if event.message.text == '位置':
+#         line_bot_api.reply_message(
+#             event.reply_token,
+#             TextSendMessage(text="請傳送您的位置資訊")
+#         )
 
+
+# @handler.add(MessageEvent, message=LocationMessage)
+# def handle_location_message(event):
+#     latitude = event.message.latitude
+#     longitude = event.message.longitude
+
+#     reply_text = f"您的位置是：\n緯度：{latitude}\n經度：{longitude}"
+#     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
+
+@app.route("/richmenu", methods=['GET'])
+def get_richmenu_list():
+    # 獲取圖文選單列表
+    rich_menu_list = line_bot_api.get_rich_menu_list()
+    rich_menu_ids = [rich_menu.rich_menu_id for rich_menu in rich_menu_list]
+    return {'rich_menu_ids': rich_menu_ids}, 200  # 返回圖文選單 ID 列表
+
+@handler.add(PostbackEvent)
+def handle_postback(event):
+    # 處理圖文選單點擊事件
+    if event.message.text == '鄰近店家':
+        confirm_template = ConfirmTemplate(
+            text='您要分享您的位置信息嗎？',
+            actions=[
+                MessageAction(label='是', text='分享位置'),
+                MessageAction(label='否', text='取消')
+            ]
+        )
+        template_message = TemplateSendMessage(
+            alt_text='確認對話框',
+            template=confirm_template
+        )
+        line_bot_api.reply_message(event.reply_token, template_message)
 
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location_message(event):
-    latitude = event.message.latitude
-    longitude = event.message.longitude
+    # 處理用戶發送的位置信息
+    latitude = event.message.latitude  # 獲取緯度
+    longitude = event.message.longitude  # 獲取經度
 
+    # 組合回應的文字信息，包含用戶的位置經緯度
     reply_text = f"您的位置是：\n緯度：{latitude}\n經度：{longitude}"
+    # 回應用戶位置經緯度信息
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
+
+
 
 import os
 if __name__ == "__main__":
