@@ -183,7 +183,7 @@ def get_recommendation(user_id):
 
     response = openai.ChatCompletion.create(
         model='gpt-4',
-        prompy = prompt,
+        messages = prompt,
         temperature = 0.5,
         max_tokens = 150
     )
