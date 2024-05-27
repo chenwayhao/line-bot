@@ -53,11 +53,11 @@ def handle_message(event):
 
     # gpt_reply1 = response.choices
     # print(gpt_reply1)
-    # Create a TextSendMessage object with the response
+    #Create a TextSendMessage object with the response
     message = TextSendMessage(text=gpt_reply)
 
-    # # Reply to the user
-    # line_bot_api.reply_message(event.reply_token, message)
+    # Reply to the user
+    line_bot_api.reply_message(event.reply_token, message)
 # @handler.add(MessageEvent, message=TextMessage)
 # def handle_message(event):
 #     if event.message.text == '位置':
