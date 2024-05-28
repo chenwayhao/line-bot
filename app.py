@@ -192,8 +192,8 @@ def handle_message(event):
         recommendation = get_recommendation(user_id)
         line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
     
-    elif:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt_message(message)))
+    # else:
+    #     line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt_message(message)))
 
     # else:
     #     if message == "推薦":
