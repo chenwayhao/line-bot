@@ -88,6 +88,9 @@ def handle_message(event):
                 ]
             )
         )
+        # Reply with the image carousel template message first
+        line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
+
         buttons_template_message_weather = TemplateSendMessage(
             alt_text='天氣調查',
             template=ButtonsTemplate(
@@ -118,6 +121,8 @@ def handle_message(event):
                 ]
             )
         )
+        # Then push the buttons template message
+        line_bot_api.push_message(user_id, buttons_template_message_weather)
 
         buttons_template_message_mood = TemplateSendMessage(
             alt_text='心情調查',
@@ -144,12 +149,6 @@ def handle_message(event):
                 ]
             )
         )
-        # Reply with the image carousel template message first
-        line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
-        
-        # Then push the buttons template message
-        line_bot_api.push_message(user_id, buttons_template_message_weather)
-
         # Then push the buttons template message
         line_bot_api.push_message(user_id, buttons_template_message_mood)
     else:
