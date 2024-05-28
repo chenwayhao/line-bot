@@ -188,13 +188,19 @@ def handle_message(event):
         # Then push the buttons template message
         line_bot_api.push_message(user_id, buttons_template_message_mood)
     
+    if message in ['讚!','還好吧?']:
+        recommendation = get_recommendation(user_id)
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
     
     else:
-        if message == "推薦":
-            recommendation = get_recommendation(user_id)
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
-        else:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt_message(message)))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt_message(message)))
+
+    # else:
+    #     if message == "推薦":
+    #         recommendation = get_recommendation(user_id)
+    #         line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
+    #     else:
+    #         line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt_message(message)))
 
 def get_recommendation(user_id):
     response = user_responses.get(user_id, {})
