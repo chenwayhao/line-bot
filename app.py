@@ -50,22 +50,22 @@ def handle_postback(event):
                     MessageAction(
                         label='悶熱',
                         display_text='悶熱',
-                        text='悶熱'
+                        #text='悶熱'
                     ),
                     MessageAction(
                         label='濕冷',
                         display_text='濕冷',
-                        text='濕冷'
+                        #text='濕冷'
                     ),
                     MessageAction(
                         label='溫暖',
                         display_text='溫暖',
-                        text='溫暖'
+                        #text='溫暖'
                     ),
                     MessageAction(
                         label='涼爽',
                         display_text='涼爽',
-                        text='涼爽'
+                        #text='涼爽'
                     )
                 ]
             )
@@ -170,17 +170,17 @@ def handle_message(event):
                     MessageAction(
                         label='很好',
                         display_text='GOOD',
-                        text='讚!'
+                        #text='讚!'
                     ),
                     MessageAction(
                         label='不好不壞',
                         display_text='SOSO',
-                        text='讚!'
+                        #text='讚!'
                     ),
                     MessageAction(
                         label='很差',
                         display_text='Bad',
-                        text='還好吧?'
+                        #text='還好吧?'
                     )
                 ]
             )
@@ -214,13 +214,6 @@ def get_recommendation(user_id):
         f"請給出一個適合的行程，1. 夜生活 、2.酒吧、3. KTV唱歌、4. 夜店。並且推薦一個適合的地點。請利用20字以內說明 1. 適合的行程 2. 地點 3. 該地點的 google map 連結"
     )
 
-    # Call the OpenAI API to get a recommendation
-    # response = openai.Completion.create(
-    #     engine="davinci",
-    #     prompt=prompt,
-    #     max_tokens=50
-    # )
-
     response = openai.ChatCompletion.create(
         model='gpt-4-turbo',
         messages = [{"role":"user","content":prompt}],
@@ -242,7 +235,6 @@ def gpt_message(message):
     gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
 
     return gpt_reply
-    # line_bot_api.reply_message(event.reply_token, TextSendMessage(text = gpt_reply))
 
 
 
