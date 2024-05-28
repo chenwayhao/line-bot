@@ -194,8 +194,7 @@ def handle_message(event):
             recommendation = get_recommendation(user_id)
             line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
         else:
-            gpt_message(message)
-            # line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt_message(message)))
 
 def get_recommendation(user_id):
     response = user_responses.get(user_id, {})
@@ -242,7 +241,8 @@ def gpt_message(message):
 
     gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
 
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text = gpt_reply))
+    return gpt_reply
+    # line_bot_api.reply_message(event.reply_token, TextSendMessage(text = gpt_reply))
 
 
 
