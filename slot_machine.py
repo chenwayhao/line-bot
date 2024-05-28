@@ -111,6 +111,7 @@ def buttons_template_message_mood():
     )
     return mood_message
 
+
 # def get_recommendation(user_responses):
 #     response = user_responses.get(user_id, {})
 #     fortune = response.get('fortune', 'unknown')

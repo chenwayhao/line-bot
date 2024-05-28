@@ -61,9 +61,6 @@ def handle_postback(event):
         recommendation = get_recommendation(user_id)
         line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
         print(mood)
-    # else:
-    #     line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt35_message(message)))
-
 
 # Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
@@ -72,41 +69,6 @@ def handle_message(event):
     if re.match('當日選配', message):
         carousel_message = slot_machine.image_carousel_template_message()
         line_bot_api.reply_message(event.reply_token, carousel_message)
-
-    # elif message in ['悶熱', '濕冷', '溫暖', '涼爽']:
-
-    #     # buttons_template_message_mood = TemplateSendMessage(
-    #     #     alt_text='心情調查',
-    #     #     template=ButtonsTemplate(
-    #     #         thumbnail_image_url='https://www.mindfulness.com.tw/upfile/editor/images/8.png',
-    #     #         title='今日心情如何?',
-    #     #         text='請選擇適合的形容詞',
-    #     #         actions=[
-    #     #             MessageAction(
-    #     #                 label='很好',
-    #     #                 # display_text='GOOD',
-    #     #                 text='很好！'
-    #     #             ),
-    #     #             MessageAction(
-    #     #                 label='不好不壞',
-    #     #                 # display_text='SOSO',
-    #     #                 text='不好不壞！'
-    #     #             ),
-    #     #             MessageAction(
-    #     #                 label='很差',
-    #     #                 # display_text='Bad',
-    #     #                 text='很差！'
-    #     #             )
-    #     #         ]
-    #     #     )
-    #     # )
-    #     line_bot_api.push_message(user_id, buttons_template_message_mood)
-    #     #print(buttons_template_message_mood)
-        
-    # elif message in ['很好！','不好不壞！','很差！']:
-    #     user_responses[user_id]['mood'] = message
-    #     recommendation = get_recommendation(user_id)
-    #     line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
     
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt35_message(message)))
