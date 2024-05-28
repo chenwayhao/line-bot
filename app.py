@@ -43,14 +43,20 @@ def handle_postback(event):
     if 'fortune_action=' in data:
         fortune = data.split('=')[1]
         user_responses[user_id]['fortune'] = fortune
+        print(fortune)
         weather_message = slot_machine.buttons_template_message_weather()
         line_bot_api.push_message(user_id, weather_message)
     elif 'weather_action' in data:
         weather = data.split('=')[1]
         user_responses[user_id]['weather'] = weather
-
+        mood_message = slot_machine.buttons_template_message_mood()
+        line_bot_api.push_message(user_id, mood_message)
         print(weather)
-        
+    elif 'mood_action' in data:
+        mood = data.split('=')[1]
+        user_responses[user_id]['mood'] = mood
+        print(mood)
+
 
 # Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
@@ -58,40 +64,38 @@ def handle_message(event):
     message = event.message.text
     user_id = event.source.user_id
     if re.match('當日選配', message):
-
         carousel_message = slot_machine.image_carousel_template_message()
-
         line_bot_api.reply_message(event.reply_token, carousel_message)
 
     elif message in ['悶熱', '濕冷', '溫暖', '涼爽']:
 
-        buttons_template_message_mood = TemplateSendMessage(
-            alt_text='心情調查',
-            template=ButtonsTemplate(
-                thumbnail_image_url='https://www.mindfulness.com.tw/upfile/editor/images/8.png',
-                title='今日心情如何?',
-                text='請選擇適合的形容詞',
-                actions=[
-                    MessageAction(
-                        label='很好',
-                        # display_text='GOOD',
-                        text='很好！'
-                    ),
-                    MessageAction(
-                        label='不好不壞',
-                        # display_text='SOSO',
-                        text='不好不壞！'
-                    ),
-                    MessageAction(
-                        label='很差',
-                        # display_text='Bad',
-                        text='很差！'
-                    )
-                ]
-            )
-        )
+        # buttons_template_message_mood = TemplateSendMessage(
+        #     alt_text='心情調查',
+        #     template=ButtonsTemplate(
+        #         thumbnail_image_url='https://www.mindfulness.com.tw/upfile/editor/images/8.png',
+        #         title='今日心情如何?',
+        #         text='請選擇適合的形容詞',
+        #         actions=[
+        #             MessageAction(
+        #                 label='很好',
+        #                 # display_text='GOOD',
+        #                 text='很好！'
+        #             ),
+        #             MessageAction(
+        #                 label='不好不壞',
+        #                 # display_text='SOSO',
+        #                 text='不好不壞！'
+        #             ),
+        #             MessageAction(
+        #                 label='很差',
+        #                 # display_text='Bad',
+        #                 text='很差！'
+        #             )
+        #         ]
+        #     )
+        # )
         line_bot_api.push_message(user_id, buttons_template_message_mood)
-        print(buttons_template_message_mood)
+        #print(buttons_template_message_mood)
         
     elif message in ['很好！','不好不壞！','很差！']:
         user_responses[user_id]['mood'] = message
