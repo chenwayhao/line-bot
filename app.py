@@ -61,15 +61,14 @@ def handle_postback(event):
         recommendation = get_recommendation(user_id)
         line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
         print(mood)
-    else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt35_message(message)))
+    # else:
+    #     line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt35_message(message)))
 
 
 # Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = event.message.text
-    user_id = event.source.user_id
     if re.match('當日選配', message):
         carousel_message = slot_machine.image_carousel_template_message()
         line_bot_api.reply_message(event.reply_token, carousel_message)
