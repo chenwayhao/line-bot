@@ -50,22 +50,22 @@ def handle_postback(event):
                     MessageAction(
                         label='悶熱',
                         display_text='悶熱',
-                        text='今天確實很悶熱耶'
+                        text='悶熱'
                     ),
                     MessageAction(
                         label='濕冷',
                         display_text='濕冷',
-                        text='今天確實很濕冷耶'
+                        text='濕冷'
                     ),
                     MessageAction(
                         label='溫暖',
                         display_text='溫暖',
-                        text='今天確實很溫暖耶'
+                        text='溫暖'
                     ),
                     MessageAction(
                         label='涼爽',
                         display_text='涼爽',
-                        text='今天確實很涼爽耶'
+                        text='涼爽'
                     )
                 ]
             )
