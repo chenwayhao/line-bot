@@ -73,8 +73,6 @@ def handle_postback(event):
         # Then push the buttons template message
         line_bot_api.push_message(user_id, buttons_template_message_weather)
 
-
-
 # Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
@@ -196,7 +194,8 @@ def handle_message(event):
             recommendation = get_recommendation(user_id)
             line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
         else:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
+            gpt_message(message)
+            # line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
 
 def get_recommendation(user_id):
     response = user_responses.get(user_id, {})
@@ -232,6 +231,20 @@ def get_recommendation(user_id):
 
     recommendation = response.choices[0]['message']['content'].replace('。','').strip()
     return recommendation
+
+def gpt_message(message):
+    response = openai.ChatCompletion.create(
+        model = 'gpt-3.5-turbo-0125',
+        messages = [{"role":"user", "content":message}],
+        temperature = 0.5,
+        max_tokens = 150    
+    )
+
+    gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
+
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text = gpt_reply))
+
+
 
 
 # @handler.add(MessageEvent, message=TextMessage)
