@@ -50,22 +50,22 @@ def handle_postback(event):
                     MessageAction(
                         label='悶熱',
                         display_text='悶熱',
-                        #text='悶熱'
+                        text='悶熱'
                     ),
                     MessageAction(
                         label='濕冷',
                         display_text='濕冷',
-                        #text='濕冷'
+                        text='濕冷'
                     ),
                     MessageAction(
                         label='溫暖',
                         display_text='溫暖',
-                        #text='溫暖'
+                        text='溫暖'
                     ),
                     MessageAction(
                         label='涼爽',
                         display_text='涼爽',
-                        #text='涼爽'
+                        text='涼爽'
                     )
                 ]
             )
@@ -170,17 +170,17 @@ def handle_message(event):
                     MessageAction(
                         label='很好',
                         display_text='GOOD',
-                        #text='讚!'
+                        text='讚!'
                     ),
                     MessageAction(
                         label='不好不壞',
                         display_text='SOSO',
-                        #text='讚!'
+                        text='讚!'
                     ),
                     MessageAction(
                         label='很差',
                         display_text='Bad',
-                        #text='還好吧?'
+                        text='還好吧?'
                     )
                 ]
             )
