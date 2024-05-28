@@ -193,14 +193,7 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
     
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt_message(message)))
-
-    # else:
-    #     if message == "推薦":
-    #         recommendation = get_recommendation(user_id)
-    #         line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
-    #     else:
-    #         line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt_message(message)))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt35_message(message)))
 
 def get_recommendation(user_id):
     response = user_responses.get(user_id, {})
@@ -220,17 +213,28 @@ def get_recommendation(user_id):
         f"請給出一個適合的行程，1. 夜生活 、2.酒吧、3. KTV唱歌、4. 夜店。並且推薦一個適合的地點。請利用20字以內說明 1. 適合的行程 2. 地點 3. 該地點的 google map 連結"
     )
 
+    recommendation = gpt4_message(prompt)
+
+    return recommendation
+
+
+def gpt4_message(message):
+
     response = openai.ChatCompletion.create(
         model='gpt-4-turbo',
-        messages = [{"role":"user","content":prompt}],
+        messages = [{"role":"user","content":message}],
         temperature = 0.5,
         max_tokens = 150
     )
 
-    recommendation = response.choices[0]['message']['content'].replace('。','').strip()
-    return recommendation
+    gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
+    return gpt_reply
 
-def gpt_message(message):
+
+
+
+
+def gpt35_message(message):
     response = openai.ChatCompletion.create(
         model = 'gpt-3.5-turbo-0125',
         messages = [{"role":"user", "content":message}],
