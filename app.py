@@ -210,13 +210,12 @@ def get_recommendation(user_id):
         f"運勢：{fortune}\n"
         f"天氣：{weather}\n"
         f"心情：{mood}\n"
-        f"請給出一個適合的行程，1. 夜生活 、2.酒吧、3. KTV唱歌、4. 夜店。並且推薦一個適合的地點。請利用20字以內說明 1. 適合的行程 2. 地點 3. 該地點的 google map 連結"
+        f"請給出一個適合的行程，1. 夜生活 、2.酒吧、3. KTV唱歌、4. 夜店。並且推薦一個台北適合的地點。請利用20字以內說明 1. 適合的行程 2. 地點 3. 該地點的 google map 連結"
     )
 
     recommendation = gpt4_message(prompt)
 
     return recommendation
-
 
 def gpt4_message(message):
 
@@ -230,10 +229,6 @@ def gpt4_message(message):
     gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
     return gpt_reply
 
-
-
-
-
 def gpt35_message(message):
     response = openai.ChatCompletion.create(
         model = 'gpt-3.5-turbo-0125',
@@ -245,9 +240,6 @@ def gpt35_message(message):
     gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
 
     return gpt_reply
-
-
-
 
 # @handler.add(MessageEvent, message=TextMessage)
 # def handle_message(event):
