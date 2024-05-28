@@ -56,22 +56,22 @@ def buttons_template_message_weather():
             title='今日天氣你覺得如何?',
             text='請選擇適合的形容詞',
             actions=[
-                MessageAction(
+                PostbackAction(
                     label='悶熱',
                     text='悶熱',
                     data = f'weather_action={weather[0]}'
                 ),
-                MessageAction(
+                PostbackAction(
                     label='濕冷',
                     text='濕冷',
                     data = f'weather_action={weather[1]}'
                 ),
-                MessageAction(
+                PostbackAction(
                     label='溫暖',
                     text='溫暖',
                     data = f'weather_action={weather[2]}'
                 ),
-                MessageAction(
+                PostbackAction(
                     label='涼爽',
                     text='涼爽',
                     data = f'weather_action={weather[3]}'
@@ -91,17 +91,17 @@ def buttons_template_message_mood():
             title='今日心情如何?',
             text='請選擇適合的形容詞',
             actions=[
-                MessageAction(
+                PostbackAction(
                     label='很好',
                     text='很好！',
                     data = f'mood_action={mood[0]}'
                 ),
-                MessageAction(
+                PostbackAction(
                     label='不好不壞',
                     text='不好不壞！',
                     data = f'mood_action={mood[1]}'
                 ),
-                MessageAction(
+                PostbackAction(
                     label='很差',
                     text='很差！',
                     data = f'mood_action={mood[2]}'

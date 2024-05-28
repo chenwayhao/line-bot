@@ -48,14 +48,14 @@ def handle_postback(event):
         weather_message = slot_machine.buttons_template_message_weather()
         line_bot_api.push_message(user_id, weather_message)
 
-    elif 'weather_action=' in data:
+    if 'weather_action=' in data:
         weather = data.split('=')[1]
         user_responses[user_id]['weather'] = weather
         print(weather)
         mood_message = slot_machine.buttons_template_message_mood()
         line_bot_api.push_message(user_id, mood_message)
         
-    elif 'mood_action=' in data:
+    if 'mood_action=' in data:
         mood = data.split('=')[1]
         user_responses[user_id]['mood'] = mood
         recommendation = get_recommendation(user_id)
