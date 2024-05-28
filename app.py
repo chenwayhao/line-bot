@@ -6,6 +6,7 @@ import os
 import openai
 import re 
 import random
+import slot_machine
 
 
 app = Flask(__name__)
@@ -83,48 +84,48 @@ def handle_message(event):
         fortunes = ['大吉', '吉', '凶', '大凶']
         random.shuffle(fortunes)
 
-        image_carousel_template_message = TemplateSendMessage(
-            alt_text='請抽籤',
-            template=ImageCarouselTemplate(
-                columns=[
-                    ImageCarouselColumn(
-                        image_url='https://i.imgur.com/W7nI6fg.jpg',
-                        action=PostbackAction(
-                            label='請抽我看看運勢',
-                            text='到底抽到什麼呢?',
-                            data=f'action={fortunes[0]}'
-                        )
-                    ),
-                    ImageCarouselColumn(
-                        image_url='https://i.imgur.com/W7nI6fg.jpg',
-                        action=PostbackAction(
-                            label='請抽我看看運勢',
-                            text='到底抽到什麼呢?',
-                            data=f'action={fortunes[1]}'
-                        )
-                    ),
-                    ImageCarouselColumn(
-                        image_url='https://i.imgur.com/W7nI6fg.jpg',
-                        action=PostbackAction(
-                            label='請抽我看看運勢',
-                            text='到底抽到什麼呢?',
-                            data=f'action={fortunes[2]}'
-                        )
-                    ),
-                    ImageCarouselColumn(
-                        image_url='https://i.imgur.com/W7nI6fg.jpg',
-                        action=PostbackAction(
-                            label='請抽我看看運勢',
-                            text='到底抽到什麼呢?',
-                            data=f'action={fortunes[3]}'
-                        )
-                    )
-                ]
-            )
-        )
+        # image_carousel_template_message = TemplateSendMessage(
+        #     alt_text='請抽籤',
+        #     template=ImageCarouselTemplate(
+        #         columns=[
+        #             ImageCarouselColumn(
+        #                 image_url='https://i.imgur.com/W7nI6fg.jpg',
+        #                 action=PostbackAction(
+        #                     label='請抽我看看運勢',
+        #                     text='到底抽到什麼呢?',
+        #                     data=f'action={fortunes[0]}'
+        #                 )
+        #             ),
+        #             ImageCarouselColumn(
+        #                 image_url='https://i.imgur.com/W7nI6fg.jpg',
+        #                 action=PostbackAction(
+        #                     label='請抽我看看運勢',
+        #                     text='到底抽到什麼呢?',
+        #                     data=f'action={fortunes[1]}'
+        #                 )
+        #             ),
+        #             ImageCarouselColumn(
+        #                 image_url='https://i.imgur.com/W7nI6fg.jpg',
+        #                 action=PostbackAction(
+        #                     label='請抽我看看運勢',
+        #                     text='到底抽到什麼呢?',
+        #                     data=f'action={fortunes[2]}'
+        #                 )
+        #             ),
+        #             ImageCarouselColumn(
+        #                 image_url='https://i.imgur.com/W7nI6fg.jpg',
+        #                 action=PostbackAction(
+        #                     label='請抽我看看運勢',
+        #                     text='到底抽到什麼呢?',
+        #                     data=f'action={fortunes[3]}'
+        #                 )
+        #             )
+        #         ]
+        #     )
+        # )
         # Reply with the image carousel template message first
-        # line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
-        print(image_carousel_template_message)
+        line_bot_api.reply_message(event.reply_token, slot_machine.image_carousel_template_message)
+        print(slot_machine.image_carousel_template_message)
 
         # buttons_template_message_weather = TemplateSendMessage(
         #     alt_text='天氣調查',
