@@ -157,7 +157,7 @@ def handle_message(event):
         # # Then push the buttons template message
         # line_bot_api.push_message(user_id, buttons_template_message_weather)
 
-    if message in ['悶熱', '濕冷', '溫暖', '涼爽']:
+    elif message in ['悶熱', '濕冷', '溫暖', '涼爽']:
         user_responses[user_id]['weather'] = message
 
         buttons_template_message_mood = TemplateSendMessage(
@@ -192,8 +192,8 @@ def handle_message(event):
         recommendation = get_recommendation(user_id)
         line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
     
-    # else:
-    #     line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt_message(message)))
+    else:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt_message(message)))
 
     # else:
     #     if message == "推薦":
