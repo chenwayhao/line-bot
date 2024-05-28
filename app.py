@@ -170,17 +170,17 @@ def handle_message(event):
                     MessageAction(
                         label='很好',
                         display_text='GOOD',
-                        text='讚!'
+                        text='很好！'
                     ),
                     MessageAction(
                         label='不好不壞',
                         display_text='SOSO',
-                        text='讚!'
+                        text='不好不壞！'
                     ),
                     MessageAction(
                         label='很差',
                         display_text='Bad',
-                        text='還好吧?'
+                        text='很差！'
                     )
                 ]
             )
@@ -188,7 +188,8 @@ def handle_message(event):
         # Then push the buttons template message
         line_bot_api.push_message(user_id, buttons_template_message_mood)
 
-    elif message in ['讚!','還好吧?']:
+    elif message in ['很好！','不好不壞！','很差！']:
+        user_responses[user_id]['mood'] = message
         recommendation = get_recommendation(user_id)
         line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
     
