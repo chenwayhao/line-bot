@@ -72,6 +72,7 @@ def handle_postback(event):
         )
         # Then push the buttons template message
         line_bot_api.push_message(user_id, buttons_template_message_weather)
+        print(buttons_template_message_weather)
 
 # Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
@@ -123,6 +124,7 @@ def handle_message(event):
         )
         # Reply with the image carousel template message first
         line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
+        print(image_carousel_template_message)
 
         # buttons_template_message_weather = TemplateSendMessage(
         #     alt_text='天氣調查',
@@ -187,6 +189,7 @@ def handle_message(event):
         )
         # Then push the buttons template message
         line_bot_api.push_message(user_id, buttons_template_message_mood)
+        print(buttons_template_message_mood)
 
     elif message in ['很好！','不好不壞！','很差！']:
         user_responses[user_id]['mood'] = message
