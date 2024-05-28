@@ -81,8 +81,9 @@ def handle_message(event):
     message = event.message.text
     user_id = event.source.user_id
     if re.match('當日選配', message):
-        fortunes = ['大吉', '吉', '凶', '大凶']
-        random.shuffle(fortunes)
+        line_bot_api.reply_message(event.reply_token, slot_machine.image_carousel_template_message)
+        # fortunes = ['大吉', '吉', '凶', '大凶']
+        # random.shuffle(fortunes)
 
         # image_carousel_template_message = TemplateSendMessage(
         #     alt_text='請抽籤',
@@ -124,8 +125,8 @@ def handle_message(event):
         #     )
         # )
         # Reply with the image carousel template message first
-        line_bot_api.reply_message(event.reply_token, slot_machine.image_carousel_template_message)
-        print(slot_machine.image_carousel_template_message)
+        
+        # print(slot_machine.image_carousel_template_message)
 
         # buttons_template_message_weather = TemplateSendMessage(
         #     alt_text='天氣調查',
