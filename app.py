@@ -210,8 +210,7 @@ def get_recommendation(user_id):
         f"運勢：{fortune}\n"
         f"天氣：{weather}\n"
         f"心情：{mood}\n"
-        f"請給出一個適合的行程，1. 夜生活 、2.酒吧、3. KTV唱歌、4. 夜店。並且推薦一個台北適合的地點。請利用20字以內說明 1. 適合的行程 2. 地點 
-        3. 地點的 google map 連結(https://www.google.com/maps/search/店名)"
+        f"請給出一個適合的行程，1. 夜生活 、2.酒吧、3. KTV唱歌、4. 夜店。並且推薦一個台北適合的地點。請利用20字以內說明 1. 適合的行程 2. 地點 3. 地點的 google map 連結(https://www.google.com/maps/search/店名)"
     )
 
     recommendation = gpt4_message(prompt)
