@@ -40,6 +40,41 @@ def handle_postback(event):
         fortune = data.split('=')[1]
         user_responses[user_id]['fortune'] = fortune
 
+        buttons_template_message_weather = TemplateSendMessage(
+            alt_text='天氣調查',
+            template=ButtonsTemplate(
+                thumbnail_image_url='https://img.lovepik.com/png/20231015/Cartoon-image-thunderstorm-weather-raindrop-cartoon-images-lightning_215956_wh1200.png',
+                title='今日天氣你覺得如何?',
+                text='請選擇適合的形容詞',
+                actions=[
+                    MessageAction(
+                        label='悶熱',
+                        display_text='悶熱',
+                        text='今天確實很悶熱耶'
+                    ),
+                    MessageAction(
+                        label='濕冷',
+                        display_text='濕冷',
+                        text='今天確實很濕冷耶'
+                    ),
+                    MessageAction(
+                        label='溫暖',
+                        display_text='溫暖',
+                        text='今天確實很溫暖耶'
+                    ),
+                    MessageAction(
+                        label='涼爽',
+                        display_text='涼爽',
+                        text='今天確實很涼爽耶'
+                    )
+                ]
+            )
+        )
+        # Then push the buttons template message
+        line_bot_api.push_message(user_id, buttons_template_message_weather)
+
+
+
 # Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
@@ -91,38 +126,41 @@ def handle_message(event):
         # Reply with the image carousel template message first
         line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
 
-        buttons_template_message_weather = TemplateSendMessage(
-            alt_text='天氣調查',
-            template=ButtonsTemplate(
-                thumbnail_image_url='https://img.lovepik.com/png/20231015/Cartoon-image-thunderstorm-weather-raindrop-cartoon-images-lightning_215956_wh1200.png',
-                title='今日天氣你覺得如何?',
-                text='請選擇適合的形容詞',
-                actions=[
-                    MessageAction(
-                        label='悶熱',
-                        display_text='悶熱',
-                        text='今天確實很悶熱耶'
-                    ),
-                    MessageAction(
-                        label='濕冷',
-                        display_text='濕冷',
-                        text='今天確實很濕冷耶'
-                    ),
-                    MessageAction(
-                        label='溫暖',
-                        display_text='溫暖',
-                        text='今天確實很溫暖耶'
-                    ),
-                    MessageAction(
-                        label='涼爽',
-                        display_text='涼爽',
-                        text='今天確實很涼爽耶'
-                    )
-                ]
-            )
-        )
-        # Then push the buttons template message
-        line_bot_api.push_message(user_id, buttons_template_message_weather)
+        # buttons_template_message_weather = TemplateSendMessage(
+        #     alt_text='天氣調查',
+        #     template=ButtonsTemplate(
+        #         thumbnail_image_url='https://img.lovepik.com/png/20231015/Cartoon-image-thunderstorm-weather-raindrop-cartoon-images-lightning_215956_wh1200.png',
+        #         title='今日天氣你覺得如何?',
+        #         text='請選擇適合的形容詞',
+        #         actions=[
+        #             MessageAction(
+        #                 label='悶熱',
+        #                 display_text='悶熱',
+        #                 text='今天確實很悶熱耶'
+        #             ),
+        #             MessageAction(
+        #                 label='濕冷',
+        #                 display_text='濕冷',
+        #                 text='今天確實很濕冷耶'
+        #             ),
+        #             MessageAction(
+        #                 label='溫暖',
+        #                 display_text='溫暖',
+        #                 text='今天確實很溫暖耶'
+        #             ),
+        #             MessageAction(
+        #                 label='涼爽',
+        #                 display_text='涼爽',
+        #                 text='今天確實很涼爽耶'
+        #             )
+        #         ]
+        #     )
+        # )
+        # # Then push the buttons template message
+        # line_bot_api.push_message(user_id, buttons_template_message_weather)
+
+    if message in ['悶熱', '濕冷', '溫暖', '涼爽']:
+        user_responses[user_id]['weather'] = message
 
         buttons_template_message_mood = TemplateSendMessage(
             alt_text='心情調查',
@@ -151,6 +189,8 @@ def handle_message(event):
         )
         # Then push the buttons template message
         line_bot_api.push_message(user_id, buttons_template_message_mood)
+    
+    
     else:
         if message == "推薦":
             recommendation = get_recommendation(user_id)
