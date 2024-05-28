@@ -43,10 +43,40 @@ def handle_postback(event):
     if 'fortune_action=' in data:
         fortune = data.split('=')[1]
         user_responses[user_id]['fortune'] = fortune
-    
         weather_message = slot_machine.buttons_template_message_weather()
+        line_bot_api.push_message(user_id, weather_message)
+    elif 'weather_action' in data:
+        weather = data.split('=')[1]
+        user_responses[user_id]['weather'] = weather
 
-        # buttons_template_message_weather = TemplateSendMessage(
+        buttons_template_message_mood = TemplateSendMessage(
+                alt_text='心情調查',
+                template=ButtonsTemplate(
+                    thumbnail_image_url='https://www.mindfulness.com.tw/upfile/editor/images/8.png',
+                    title='今日心情如何?',
+                    text='請選擇適合的形容詞',
+                    actions=[
+                        MessageAction(
+                            label='很好',
+                            # display_text='GOOD',
+                            text='很好！'
+                        ),
+                        MessageAction(
+                            label='不好不壞',
+                            # display_text='SOSO',
+                            text='不好不壞！'
+                        ),
+                        MessageAction(
+                            label='很差',
+                            # display_text='Bad',
+                            text='很差！'
+                        )
+                    ]
+                )
+            )
+            # Then push the buttons template message
+        line_bot_api.push_message(user_id, buttons_template_message_mood)
+        print(buttons_template_message_mood)
         #     alt_text='天氣調查',
         #     template=ButtonsTemplate(
         #         thumbnail_image_url='https://img.lovepik.com/png/20231015/Cartoon-image-thunderstorm-weather-raindrop-cartoon-images-lightning_215956_wh1200.png',
@@ -78,7 +108,7 @@ def handle_postback(event):
         # )
         
         # Then push the buttons template message
-        line_bot_api.push_message(user_id, weather_message)
+        
 
 # Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
@@ -93,38 +123,10 @@ def handle_message(event):
         # fortunes = ['大吉', '吉', '凶', '大凶']
         # random.shuffle(fortunes)
 
-    elif message in ['悶熱', '濕冷', '溫暖', '涼爽']:
-        user_responses[user_id]['weather'] = message
+    # elif message in ['悶熱', '濕冷', '溫暖', '涼爽']:
+    #     user_responses[user_id]['weather'] = message
 
-        buttons_template_message_mood = TemplateSendMessage(
-            alt_text='心情調查',
-            template=ButtonsTemplate(
-                thumbnail_image_url='https://www.mindfulness.com.tw/upfile/editor/images/8.png',
-                title='今日心情如何?',
-                text='請選擇適合的形容詞',
-                actions=[
-                    MessageAction(
-                        label='很好',
-                        # display_text='GOOD',
-                        text='很好！'
-                    ),
-                    MessageAction(
-                        label='不好不壞',
-                        # display_text='SOSO',
-                        text='不好不壞！'
-                    ),
-                    MessageAction(
-                        label='很差',
-                        # display_text='Bad',
-                        text='很差！'
-                    )
-                ]
-            )
-        )
-        # Then push the buttons template message
-        line_bot_api.push_message(user_id, buttons_template_message_mood)
-        print(buttons_template_message_mood)
-
+        
     elif message in ['很好！','不好不壞！','很差！']:
         user_responses[user_id]['mood'] = message
         recommendation = get_recommendation(user_id)

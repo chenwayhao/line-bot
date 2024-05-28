@@ -57,23 +57,23 @@ def buttons_template_message_weather():
             actions=[
                 MessageAction(
                     label='悶熱',
-                    # display_text='悶熱',
-                    text='悶熱'
+                    text='悶熱',
+                    data = f'weather_action=悶熱'
                 ),
                 MessageAction(
                     label='濕冷',
-                    # display_text='濕冷',
-                    text='濕冷'
+                    text='濕冷',
+                    data = f'weather_action=濕冷'
                 ),
                 MessageAction(
                     label='溫暖',
-                    # display_text='溫暖',
-                    text='溫暖'
+                    text='溫暖',
+                    data = f'weather_action=溫暖'
                 ),
                 MessageAction(
                     label='涼爽',
-                    # display_text='涼爽',
-                    text='涼爽'
+                    text='涼爽',
+                    data = f'weather_action=涼爽'
                 )
             ]
         )
