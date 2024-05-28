@@ -81,7 +81,10 @@ def handle_message(event):
     message = event.message.text
     user_id = event.source.user_id
     if re.match('當日選配', message):
-        line_bot_api.reply_message(event.reply_token, slot_machine.image_carousel_template_message)
+
+        carousel_message = slot_machine.image_carousel_template_message
+
+        line_bot_api.reply_message(event.reply_token, carousel_message)
         # fortunes = ['大吉', '吉', '凶', '大凶']
         # random.shuffle(fortunes)
 
