@@ -49,65 +49,7 @@ def handle_postback(event):
         weather = data.split('=')[1]
         user_responses[user_id]['weather'] = weather
 
-        buttons_template_message_mood = TemplateSendMessage(
-                alt_text='心情調查',
-                template=ButtonsTemplate(
-                    thumbnail_image_url='https://www.mindfulness.com.tw/upfile/editor/images/8.png',
-                    title='今日心情如何?',
-                    text='請選擇適合的形容詞',
-                    actions=[
-                        MessageAction(
-                            label='很好',
-                            # display_text='GOOD',
-                            text='很好！'
-                        ),
-                        MessageAction(
-                            label='不好不壞',
-                            # display_text='SOSO',
-                            text='不好不壞！'
-                        ),
-                        MessageAction(
-                            label='很差',
-                            # display_text='Bad',
-                            text='很差！'
-                        )
-                    ]
-                )
-            )
-            # Then push the buttons template message
-        line_bot_api.push_message(user_id, buttons_template_message_mood)
-        print(buttons_template_message_mood)
-        #     alt_text='天氣調查',
-        #     template=ButtonsTemplate(
-        #         thumbnail_image_url='https://img.lovepik.com/png/20231015/Cartoon-image-thunderstorm-weather-raindrop-cartoon-images-lightning_215956_wh1200.png',
-        #         title='今日天氣你覺得如何?',
-        #         text='請選擇適合的形容詞',
-        #         actions=[
-        #             MessageAction(
-        #                 label='悶熱',
-        #                 # display_text='悶熱',
-        #                 text='悶熱'
-        #             ),
-        #             MessageAction(
-        #                 label='濕冷',
-        #                 # display_text='濕冷',
-        #                 text='濕冷'
-        #             ),
-        #             MessageAction(
-        #                 label='溫暖',
-        #                 # display_text='溫暖',
-        #                 text='溫暖'
-        #             ),
-        #             MessageAction(
-        #                 label='涼爽',
-        #                 # display_text='涼爽',
-        #                 text='涼爽'
-        #             )
-        #         ]
-        #     )
-        # )
-        
-        # Then push the buttons template message
+        print(weather)
         
 
 # Handle text messages
@@ -120,12 +62,36 @@ def handle_message(event):
         carousel_message = slot_machine.image_carousel_template_message()
 
         line_bot_api.reply_message(event.reply_token, carousel_message)
-        # fortunes = ['大吉', '吉', '凶', '大凶']
-        # random.shuffle(fortunes)
 
-    # elif message in ['悶熱', '濕冷', '溫暖', '涼爽']:
-    #     user_responses[user_id]['weather'] = message
+    elif message in ['悶熱', '濕冷', '溫暖', '涼爽']:
 
+        buttons_template_message_mood = TemplateSendMessage(
+            alt_text='心情調查',
+            template=ButtonsTemplate(
+                thumbnail_image_url='https://www.mindfulness.com.tw/upfile/editor/images/8.png',
+                title='今日心情如何?',
+                text='請選擇適合的形容詞',
+                actions=[
+                    MessageAction(
+                        label='很好',
+                        # display_text='GOOD',
+                        text='很好！'
+                    ),
+                    MessageAction(
+                        label='不好不壞',
+                        # display_text='SOSO',
+                        text='不好不壞！'
+                    ),
+                    MessageAction(
+                        label='很差',
+                        # display_text='Bad',
+                        text='很差！'
+                    )
+                ]
+            )
+        )
+        line_bot_api.push_message(user_id, buttons_template_message_mood)
+        print(buttons_template_message_mood)
         
     elif message in ['很好！','不好不壞！','很差！']:
         user_responses[user_id]['mood'] = message
