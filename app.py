@@ -91,7 +91,7 @@ def handle_message(event):
                         image_url='https://i.imgur.com/W7nI6fg.jpg',
                         action=PostbackAction(
                             label='請抽我看看運勢',
-                            display_text='到底抽到什麼呢?',
+                            text='到底抽到什麼呢?',
                             data=f'action={fortunes[0]}'
                         )
                     ),
@@ -99,7 +99,7 @@ def handle_message(event):
                         image_url='https://i.imgur.com/W7nI6fg.jpg',
                         action=PostbackAction(
                             label='請抽我看看運勢',
-                            display_text='到底抽到什麼呢?',
+                            text='到底抽到什麼呢?',
                             data=f'action={fortunes[1]}'
                         )
                     ),
@@ -107,7 +107,7 @@ def handle_message(event):
                         image_url='https://i.imgur.com/W7nI6fg.jpg',
                         action=PostbackAction(
                             label='請抽我看看運勢',
-                            display_text='到底抽到什麼呢?',
+                            text='到底抽到什麼呢?',
                             data=f'action={fortunes[2]}'
                         )
                     ),
@@ -115,7 +115,7 @@ def handle_message(event):
                         image_url='https://i.imgur.com/W7nI6fg.jpg',
                         action=PostbackAction(
                             label='請抽我看看運勢',
-                            display_text='到底抽到什麼呢?',
+                            text='到底抽到什麼呢?',
                             data=f'action={fortunes[3]}'
                         )
                     )
@@ -123,7 +123,7 @@ def handle_message(event):
             )
         )
         # Reply with the image carousel template message first
-        line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
+        # line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
         print(image_carousel_template_message)
 
         # buttons_template_message_weather = TemplateSendMessage(
@@ -217,7 +217,7 @@ def get_recommendation(user_id):
         f"請給出一個適合的行程，1. 夜生活 、2.酒吧、3. KTV唱歌、4. 夜店。並且推薦一個台北適合的地點。請利用20字以內說明 1. 適合的行程 2. 地點 3. 地點的 google map 連結(https://www.google.com/maps/search/店名)"
     )
 
-    recommendation = gpt4_message(prompt)
+    recommendation = gpt35_message(prompt)
 
     return recommendation
 
