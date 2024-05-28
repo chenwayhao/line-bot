@@ -1,4 +1,5 @@
 import random
+from linebot.models import *
 
 def image_carousel_template_message():
     fortunes = ['大吉', '吉', '凶', '大凶']
