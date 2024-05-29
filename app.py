@@ -192,8 +192,8 @@ def ask_for_location_permission(reply_token):
     line_bot_api.reply_message(reply_token, message)
 
 # 處理 postback 事件
-@handler.add(PostbackEvent)
-def handle_postback(event):
+@handler.add(PostbackEvent01)
+def handle_postback01(event):
     postback_data = event.postback.data
     
     if postback_data == "允許":
