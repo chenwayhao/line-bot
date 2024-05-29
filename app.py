@@ -193,7 +193,7 @@ def ask_for_location_permission(reply_token):
 
 # Function to request location from the user
 def request_location(reply_token):
-    message = TextSendMessage(text="請分享您的位置。")
+    message = TextSendMessage(text="請點選左下角分享位置。")
     line_bot_api.reply_message(reply_token, message)
 
 @handler.add(MessageEvent, message=LocationMessage)
@@ -214,7 +214,7 @@ def get_bars_from_chatgpt(latitude, longitude):
              f"1. 餐酒館名稱\n地址：餐酒館地址\nGoogle評分：評分\n"
     
     # 調用 ChatGPT 函式來處理查詢字串
-    map_recommendation = gpt4_message(map_prompt)
+    map_recommendation = gpt35_message(map_prompt)
 
     return map_recommendation
 
