@@ -66,7 +66,7 @@ def handle_postback(event):
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = event.message.text
-    if re.match('當日選配', message):
+    if "當日選配" in message:
         carousel_message = slot_machine.image_carousel_template_message()
         line_bot_api.reply_message(event.reply_token, carousel_message)
     
