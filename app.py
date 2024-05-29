@@ -214,7 +214,7 @@ def get_bars_from_chatgpt(latitude, longitude):
              f"1. 餐酒館名稱\n地址：餐酒館地址\nGoogle評分：評分\n"
     
     # 調用 ChatGPT 函式來處理查詢字串
-    map_recommendation = gpt35_message(map_prompt)
+    map_recommendation = gpt4_message(map_prompt)
 
     return map_recommendation
 
