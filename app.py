@@ -66,7 +66,7 @@ def handle_postback(event):
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = event.message.text
-    if "當日選配" in message:
+    if re.match('當日選配', message):
         carousel_message = slot_machine.image_carousel_template_message()
         line_bot_api.reply_message(event.reply_token, carousel_message)
     
@@ -98,9 +98,8 @@ def get_recommendation(user_id):
 # 處理使用者文字訊息事件
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
-    text = event.message.text.lower()
-    
-    if "附近美食" in text:
+    message = event.message.text
+    if re.match('附近美食', message):
         ask_for_location_permission(event.reply_token)
 
 # 問使用者是否允許取得位置的函數
