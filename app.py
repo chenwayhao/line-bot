@@ -62,6 +62,21 @@ def handle_postback(event):
         line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
         print(mood)
 
+def map_postback(event):
+    postback_data = event.postback.data
+    
+    if postback_data == "允許":
+        request_location(event.reply_token)
+        quick_reply=QuickReply(items=[
+            QuickReplyButton(action=LocationAction(label="傳送位置"))
+    ])    
+    elif postback_data == "不允許":
+        reply_text = "您已選擇不允許我們使用您的位置。"
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
+    else:
+        reply_text = "無效的選項。"
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
+
 # Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
@@ -186,7 +201,25 @@ def ask_for_location_permission(reply_token):
     message = FlexSendMessage(alt_text="Location Permission", contents=richmenu_json)
     line_bot_api.reply_message(reply_token, message)
 
+# 處理位置訊息事件
+@handler.add(MessageEvent, message=LocationMessage)
+def handle_location_message(event):
+    latitude = event.message.latitude
+    longitude = event.message.longitude
+    
+    # 使用 ChatGPT 來查詢餐酒館
+    reply_text = get_bars_from_chatgpt(latitude, longitude)
+    
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
 
+
+def get_bars_from_chatgpt(latitude, longitude):
+    
+    map_prompt = f"請列出經緯度 {latitude}, {longitude} 附近的五家餐酒館，格式如下：\n" \
+             f"1. 餐酒館名稱\n地址：餐酒館地址\nGoogle評分：評分\n"
+    map_recommendation = gpt35_message(map_prompt)
+
+    return map_recommendation
 
 def gpt4_message(message):
 
