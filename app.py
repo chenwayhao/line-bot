@@ -95,6 +95,96 @@ def get_recommendation(user_id):
 
     return recommendation
 
+# 問使用者是否允許取得位置的函數
+def ask_for_location_permission(reply_token):
+    # Rich menu JSON 結構
+    richmenu_json = {
+        "type": "bubble",
+        "hero": {
+            "type": "image",
+            "url": "https://media.istockphoto.com/id/1421460958/photo/hand-of-young-woman-searching-location-in-map-online-on-smartphone.jpg?s=612x612&w=0&k=20&c=Kw8yHXSKmEhfjJVscY51Zob6IRjof0N2wmj2zp2-iRI=",
+            "size": "full",
+            "aspectRatio": "20:13",
+            "aspectMode": "cover",
+            "action": {
+                "type": "uri",
+                "uri": "https://line.me/"
+            },
+            "align": "center"
+        },
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+                {
+                    "type": "box",
+                    "layout": "vertical",
+                    "margin": "lg",
+                    "spacing": "sm",
+                    "contents": [
+                        {
+                            "type": "box",
+                            "layout": "baseline",
+                            "spacing": "sm",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "要允許『夜貓Fun生活』使用您的位置嗎?",
+                                    "wrap": True,
+                                    "color": "#666666",
+                                    "size": "sm",
+                                    "flex": 6,
+                                    "style": "italic",
+                                    "weight": "bold"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "footer": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "contents": [
+                {
+                    "type": "button",
+                    "style": "link",
+                    "height": "sm",
+                    "action": {
+                        "type": "postback",
+                        "label": "允許",
+                        "data": "允許"
+                    }
+                },
+                {
+                    "type": "button",
+                    "style": "link",
+                    "height": "sm",
+                    "action": {
+                        "type": "postback",
+                        "label": "不允許",
+                        "data": "不允許"
+                    }
+                },
+                {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [],
+                    "margin": "sm"
+                }
+            ],
+            "flex": 0
+        }
+    }
+
+
+# 發送 Rich Menu 給使用者
+    message = FlexSendMessage(alt_text="Location Permission", contents=richmenu_json)
+    line_bot_api.reply_message(reply_token, message)
+
+
 def gpt4_message(message):
 
     response = openai.ChatCompletion.create(
@@ -118,34 +208,6 @@ def gpt35_message(message):
     gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
 
     return gpt_reply
-
-# @handler.add(MessageEvent, message=TextMessage)
-# def handle_message(event):
-#     user_message = event.message.text
-#     #gpt4 version  
-#     response = openai.ChatCompletion.create(
-#         model='gpt-4o',
-#         messages = [{"role":"user","content":user_message}],
-#         temperature = 0.5,
-#         max_tokens = 150
-#     )
-# #--------------------------------------------------------
-#     # response = openai.ChatCompletion.create(
-#     #     model = 'gpt-3.5-turbo-0125',
-#     #     messages = [{"role":"user","content":user_message}],
-#     #     temperature = 0.5,
-#     #     max_tokens = 250    
-#     # )
-# #--------------------------------------------------------
-#     gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
-#     gpt_reply1 = response.choices
-#     print(gpt_reply1)
-#     #Create a TextSendMessage object with the response
-#     message = TextSendMessage(text=gpt_reply)
-
-#     # Reply to the user
-#     line_bot_api.reply_message(event.reply_token, message)
-
 
 import os
 if __name__ == "__main__":
