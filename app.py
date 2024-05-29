@@ -191,6 +191,11 @@ def ask_for_location_permission(reply_token):
     message = FlexSendMessage(alt_text="Location Permission", contents=richmenu_json)
     line_bot_api.reply_message(reply_token, message)
 
+# Function to request location from the user
+def request_location(reply_token):
+    message = TextSendMessage(text="請分享您的位置。")
+    line_bot_api.reply_message(reply_token, message)
+
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location_message(event):
     latitude = event.message.latitude
