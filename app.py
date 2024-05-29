@@ -95,6 +95,14 @@ def get_recommendation(user_id):
 
     return recommendation
 
+# 處理使用者文字訊息事件
+@handler.add(MessageEvent, message=TextMessage)
+def handle_text_message(event):
+    text = event.message.text.lower()
+    
+    if "附近美食" in text:
+        ask_for_location_permission(event.reply_token)
+
 # 問使用者是否允許取得位置的函數
 def ask_for_location_permission(reply_token):
     # Rich menu JSON 結構
