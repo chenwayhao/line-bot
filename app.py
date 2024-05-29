@@ -236,7 +236,7 @@ def gpt35_message(message):
         model = 'gpt-3.5-turbo-0125',
         messages = [{"role":"user", "content":message}],
         temperature = 0.5,
-        max_tokens = 150    
+        max_tokens = 200    
     )
 
     gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
