@@ -191,19 +191,6 @@ def ask_for_location_permission(reply_token):
     message = FlexSendMessage(alt_text="Location Permission", contents=richmenu_json)
     line_bot_api.reply_message(reply_token, message)
 
-# 處理 postback 事件
-@handler.add(PostbackEvent01)
-def handle_postback01(event):
-    postback_data = event.postback.data
-    
-    if postback_data == "允許":
-        request_location(event.reply_token)
-    elif postback_data == "不允許":
-        reply_text = "您已選擇不允許我們使用您的位置。"
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
-    else:
-        reply_text = "無效的選項。"
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
 
 
 def gpt4_message(message):
