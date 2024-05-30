@@ -61,7 +61,7 @@ def handle_postback(event):
     
     elif data == "允許":
         location_message = request_location()
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text = location_message))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '請點選分享位置', quick_reply = location_message))
 
     elif data == "不允許":
         reply_text = "您已選擇不允許我們使用您的位置。"
@@ -75,7 +75,7 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, carousel_message)
     elif re.match('附近美食', message):
         prelocation = nearby_restaurant.ask_for_location_permission()
-        prelocation_message = FlexSendMessage(alt_text="Location Permission", contents=prelocation)
+        prelocation_message = FlexSendMessage(alt_text="Location Permission", contents = prelocation)
         line_bot_api.reply_message(event.reply_token, prelocation_message)
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt35_message(message)))
@@ -198,7 +198,7 @@ def request_location():
     # line_bot_api.reply_message(reply_token, message)
     quick_reply = QuickReply(
                     items=[
-                        QuickReplyButton(action=LocationAction(label="發送位置"))
+                        QuickReplyButton(action = LocationAction(label="發送位置"))
                     ]
                 )
     return quick_reply
