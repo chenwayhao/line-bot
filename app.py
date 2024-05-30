@@ -61,7 +61,7 @@ def handle_postback(event):
     
     elif data == "允許":
         location_message = request_location()
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(location_message))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text = location_message))
 
     elif data == "不允許":
         reply_text = "您已選擇不允許我們使用您的位置。"
@@ -207,6 +207,7 @@ def request_location():
 def handle_location_message(event):
     latitude = event.message.latitude
     longitude = event.message.longitude
+
     
     # 直接調用 ChatGPT 函式來生成回覆訊息
     reply_text = get_bars_from_chatgpt(latitude, longitude)
