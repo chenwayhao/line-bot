@@ -208,6 +208,7 @@ def handle_location_message(event):
     latitude = event.message.latitude
     longitude = event.message.longitude
 
+    print(latitude, longitude)
     
     # 直接調用 ChatGPT 函式來生成回覆訊息
     reply_text = get_bars_from_chatgpt(latitude, longitude)
