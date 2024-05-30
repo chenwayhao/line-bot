@@ -6,7 +6,8 @@ import os
 import openai
 import re 
 import random
-import slot_machine
+import slot_machine, nearby_restaurant
+
 
 
 app = Flask(__name__)
@@ -36,11 +37,7 @@ def handle_postback(event):
     data = event.postback.data
     # Log the response
     if user_id not in user_responses:
-        user_responses[user_id] = {}
-    # if 'action=' in data:
-        fortune = data.split('=')[1]
-        user_responses[user_id]['fortune'] = fortune
-    
+        user_responses[user_id] = {} 
     if 'fortune_action=' in data:
         fortune = data.split('=')[1]
         user_responses[user_id]['fortune'] = fortune
@@ -75,7 +72,9 @@ def handle_message(event):
         carousel_message = slot_machine.image_carousel_template_message()
         line_bot_api.reply_message(event.reply_token, carousel_message)
     elif re.match('附近美食', message):
-        ask_for_location_permission(event.reply_token)
+        prelocation = nearby_restaurant.ask_for_location_permission()
+        prelocation_message = FlexSendMessage(alt_text="Location Permission", contents=prelocation)
+        line_bot_api.reply_message(event.reply_token, prelocation_message)
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt35_message(message)))
 
@@ -103,93 +102,93 @@ def get_recommendation(user_id):
 
 
 # 問使用者是否允許取得位置的函數
-def ask_for_location_permission(reply_token):
-    # Rich menu JSON 結構
-    richmenu_json = {
-        "type": "bubble",
-        "hero": {
-            "type": "image",
-            "url": "https://media.istockphoto.com/id/1421460958/photo/hand-of-young-woman-searching-location-in-map-online-on-smartphone.jpg?s=612x612&w=0&k=20&c=Kw8yHXSKmEhfjJVscY51Zob6IRjof0N2wmj2zp2-iRI=",
-            "size": "full",
-            "aspectRatio": "20:13",
-            "aspectMode": "cover",
-            "action": {
-                "type": "uri",
-                "uri": "https://line.me/"
-            },
-            "align": "center"
-        },
-        "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-                {
-                    "type": "box",
-                    "layout": "vertical",
-                    "margin": "lg",
-                    "spacing": "sm",
-                    "contents": [
-                        {
-                            "type": "box",
-                            "layout": "baseline",
-                            "spacing": "sm",
-                            "contents": [
-                                {
-                                    "type": "text",
-                                    "text": "要允許『夜貓Fun生活』使用您的位置嗎?",
-                                    "wrap": True,
-                                    "color": "#666666",
-                                    "size": "sm",
-                                    "flex": 6,
-                                    "style": "italic",
-                                    "weight": "bold"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        "footer": {
-            "type": "box",
-            "layout": "vertical",
-            "spacing": "sm",
-            "contents": [
-                {
-                    "type": "button",
-                    "style": "link",
-                    "height": "sm",
-                    "action": {
-                        "type": "postback",
-                        "label": "允許",
-                        "data": "允許"
-                    }
-                },
-                {
-                    "type": "button",
-                    "style": "link",
-                    "height": "sm",
-                    "action": {
-                        "type": "postback",
-                        "label": "不允許",
-                        "data": "不允許"
-                    }
-                },
-                {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [],
-                    "margin": "sm"
-                }
-            ],
-            "flex": 0
-        }
-    }
+# def ask_for_location_permission(reply_token):
+#     # Rich menu JSON 結構
+#     richmenu_json = {
+#         "type": "bubble",
+#         "hero": {
+#             "type": "image",
+#             "url": "https://media.istockphoto.com/id/1421460958/photo/hand-of-young-woman-searching-location-in-map-online-on-smartphone.jpg?s=612x612&w=0&k=20&c=Kw8yHXSKmEhfjJVscY51Zob6IRjof0N2wmj2zp2-iRI=",
+#             "size": "full",
+#             "aspectRatio": "20:13",
+#             "aspectMode": "cover",
+#             "action": {
+#                 "type": "uri",
+#                 "uri": "https://line.me/"
+#             },
+#             "align": "center"
+#         },
+#         "body": {
+#             "type": "box",
+#             "layout": "vertical",
+#             "contents": [
+#                 {
+#                     "type": "box",
+#                     "layout": "vertical",
+#                     "margin": "lg",
+#                     "spacing": "sm",
+#                     "contents": [
+#                         {
+#                             "type": "box",
+#                             "layout": "baseline",
+#                             "spacing": "sm",
+#                             "contents": [
+#                                 {
+#                                     "type": "text",
+#                                     "text": "要允許『夜貓Fun生活』使用您的位置嗎?",
+#                                     "wrap": True,
+#                                     "color": "#666666",
+#                                     "size": "sm",
+#                                     "flex": 6,
+#                                     "style": "italic",
+#                                     "weight": "bold"
+#                                 }
+#                             ]
+#                         }
+#                     ]
+#                 }
+#             ]
+#         },
+#         "footer": {
+#             "type": "box",
+#             "layout": "vertical",
+#             "spacing": "sm",
+#             "contents": [
+#                 {
+#                     "type": "button",
+#                     "style": "link",
+#                     "height": "sm",
+#                     "action": {
+#                         "type": "postback",
+#                         "label": "允許",
+#                         "data": "允許"
+#                     }
+#                 },
+#                 {
+#                     "type": "button",
+#                     "style": "link",
+#                     "height": "sm",
+#                     "action": {
+#                         "type": "postback",
+#                         "label": "不允許",
+#                         "data": "不允許"
+#                     }
+#                 },
+#                 {
+#                     "type": "box",
+#                     "layout": "vertical",
+#                     "contents": [],
+#                     "margin": "sm"
+#                 }
+#             ],
+#             "flex": 0
+#         }
+#     }
 
 
-# 發送 Rich Menu 給使用者
-    message = FlexSendMessage(alt_text="Location Permission", contents=richmenu_json)
-    line_bot_api.reply_message(reply_token, message)
+# # 發送 Rich Menu 給使用者
+#     message = FlexSendMessage(alt_text="Location Permission", contents=richmenu_json)
+#     line_bot_api.reply_message(reply_token, message)
 
 # Function to request location from the user
 def request_location(reply_token):
@@ -214,7 +213,7 @@ def get_bars_from_chatgpt(latitude, longitude):
              f"1. 餐酒館名稱\n地址：餐酒館地址\nGoogle評分：評分\n"
     
     # 調用 ChatGPT 函式來處理查詢字串
-    map_recommendation = gpt35_message(map_prompt)
+    map_recommendation = gpt4_message(map_prompt)
 
     return map_recommendation
 
