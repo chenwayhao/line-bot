@@ -45,22 +45,24 @@ def handle_postback(event):
         weather_message = slot_machine.buttons_template_message_weather()
         line_bot_api.push_message(user_id, weather_message)
 
-    if 'weather_action=' in data:
+    elif 'weather_action=' in data:
         weather = data.split('=')[1]
         user_responses[user_id]['weather'] = weather
         print(weather)
         mood_message = slot_machine.buttons_template_message_mood()
         line_bot_api.push_message(user_id, mood_message)
         
-    if 'mood_action=' in data:
+    elif 'mood_action=' in data:
         mood = data.split('=')[1]
         user_responses[user_id]['mood'] = mood
         recommendation = get_recommendation(user_id)
         line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
         print(mood)
     
-    if data == "允許":
-        request_location(event.reply_token)
+    elif data == "允許":
+        location_message = request_location()
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(location_message))
+
     elif data == "不允許":
         reply_text = "您已選擇不允許我們使用您的位置。"
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
@@ -191,9 +193,15 @@ def get_recommendation(user_id):
 #     line_bot_api.reply_message(reply_token, message)
 
 # Function to request location from the user
-def request_location(reply_token):
-    message = TextSendMessage(text="請點選左下角分享位置。")
-    line_bot_api.reply_message(reply_token, message)
+def request_location():
+    # message = TextSendMessage(text="請點選左下角分享位置。")
+    # line_bot_api.reply_message(reply_token, message)
+    quick_reply = QuickReply(
+                    items=[
+                        QuickReplyButton(action=LocationAction(label="發送位置"))
+                    ]
+                )
+    return quick_reply
 
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location_message(event):
