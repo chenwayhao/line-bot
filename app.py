@@ -1,4 +1,4 @@
-from flask import Flask, request, abort, jsonify
+from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
@@ -6,8 +6,7 @@ import os
 import openai
 import re 
 import slot_machine, nearby_restaurant
-import googlemaps
-
+import requests
 
 
 
@@ -103,9 +102,35 @@ def handle_location_message(event):
     response = requests.get(url)
     results = response.json().get('results', [])
 
+    columns = []
+    for result in results[:10]:  # Show up to 10 results
+        name = result.get('name')
+        address = result.get('vicinity')
+        rating = result.get('rating', 'N/A')
+        place_id = result.get('place_id')
+        maps_url = f"https://www.google.com/maps/place/?q=place_id:{place_id}"
+        
+        column = CarouselColumn(
+            thumbnail_image_url=result.get('photos', [{}])[0].get('photo_reference', ''),
+            title=name,
+            text=f"Rating: {rating}\n{address}",
+            actions=[
+                {
+                    "type": "uri",
+                    "label": "View on Map",
+                    "uri": maps_url
+                }
+            ]
+        )
+        columns.append(column)
+    
+    carousel_template = CarouselTemplate(columns=columns)
+    template_message = TemplateSendMessage(alt_text='Nearby Restaurants',template=carousel_template)
+    
+    line_bot_api.reply_message(event.reply_token, template_message)
     # 直接調用 ChatGPT 函式來生成回覆訊息
-    reply_text = nearby_restaurant.getnearby_recommendation(latitude, longitude)
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text = reply_text))
+    # reply_text = nearby_restaurant.getnearby_recommendation(latitude, longitude)
+    # line_bot_api.reply_message(event.reply_token, TextSendMessage(text = reply_text))
 
 # def get_bars_from_chatgpt(latitude, longitude):
 #     # 使用 ChatGPT 來生成查詢字串
