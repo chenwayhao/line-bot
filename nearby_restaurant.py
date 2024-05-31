@@ -96,11 +96,16 @@ def request_location():
 
 def getnearby_recommendation(latitude, longitude):
     # 使用 ChatGPT 來生成查詢字串
-    map_prompt = f"請列出經緯度 {latitude}, {longitude} 附近的五家餐酒館，格式如下：\n" \
-             f"1. 餐酒館名稱\n地址：餐酒館地址\nGoogle評分：評分\n"
-    
+    # map_prompt = (
+    #     f"請列出經緯度 {latitude}, {longitude} 附近的五家餐酒館，格式如下：\n" \
+    #     f"1. 餐酒館名稱\n地址：餐酒館地址\nGoogle評分：評分\n"
+    # )
+    prompt =( f'請列出經緯度{latitude},{longitude} 附近的五家餐酒館：'
+        f'(利用https://www.google.com/maps/search/bistro/@經緯度)'
+        f'1. 餐廳名稱 2. 餐廳地址 3. 餐廳 google map 評分'
+    )
     # 調用 ChatGPT 函式來處理查詢字串
-    map_recommendation = app.gpt4_message(map_prompt)
+    map_recommendation = app.gpt4_message(prompt)
 
     return map_recommendation
 
