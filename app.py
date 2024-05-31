@@ -110,8 +110,14 @@ def handle_location_message(event):
         place_id = result.get('place_id')
         maps_url = f"https://www.google.com/maps/place/?q=place_id:{place_id}"
         
+        photo_reference = result.get('photos', [{}])[0].get('photo_reference')
+        if photo_reference:
+            thumbnail_image_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference={photo_reference}&key={google_maps_api_key}"
+        else:
+            thumbnail_image_url = "https://via.placeholder.com/800x400?text=No+Image"
+
         column = CarouselColumn(
-            thumbnail_image_url=result.get('photos', [{}])[0].get('photo_reference', ''),
+            thumbnail_image_url=thumbnail_image_url,
             title=name,
             text=f"Rating: {rating}\n{address}",
             actions=[
@@ -125,7 +131,7 @@ def handle_location_message(event):
         columns.append(column)
     
     carousel_template = CarouselTemplate(columns=columns)
-    template_message = TemplateSendMessage(alt_text='Nearby Restaurants',template=carousel_template)
+    template_message = TemplateSendMessage(alt_text='Nearby Restaurants', template = carousel_template)
     
     line_bot_api.reply_message(event.reply_token, template_message)
     # 直接調用 ChatGPT 函式來生成回覆訊息
