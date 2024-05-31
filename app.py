@@ -55,7 +55,7 @@ def handle_postback(event):
     elif 'mood_action=' in data:
         mood = data.split('=')[1]
         user_responses[user_id]['mood'] = mood
-        recommendation = slot_machine.get_recommendation(user_id)
+        recommendation = slot_machine.getslot_recommendation(user_id)
         line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
         print(mood)
     
@@ -100,21 +100,21 @@ def handle_location_message(event):
     print(latitude, longitude)
     
     # 直接調用 ChatGPT 函式來生成回覆訊息
-    reply_text = get_bars_from_chatgpt(latitude, longitude)
+    reply_text = nearby_restaurant.getnearby_recommendation(latitude, longitude)
     
     # 回覆用戶
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text = reply_text))
 
 
-def get_bars_from_chatgpt(latitude, longitude):
-    # 使用 ChatGPT 來生成查詢字串
-    map_prompt = f"請列出經緯度 {latitude}, {longitude} 附近的五家餐酒館，格式如下：\n" \
-             f"1. 餐酒館名稱\n地址：餐酒館地址\nGoogle評分：評分\n"
+# def get_bars_from_chatgpt(latitude, longitude):
+#     # 使用 ChatGPT 來生成查詢字串
+#     map_prompt = f"請列出經緯度 {latitude}, {longitude} 附近的五家餐酒館，格式如下：\n" \
+#              f"1. 餐酒館名稱\n地址：餐酒館地址\nGoogle評分：評分\n"
     
-    # 調用 ChatGPT 函式來處理查詢字串
-    map_recommendation = gpt4_message(map_prompt)
+#     # 調用 ChatGPT 函式來處理查詢字串
+#     map_recommendation = gpt4_message(map_prompt)
 
-    return map_recommendation
+#     return map_recommendation
 
 
 def gpt4_message(message):

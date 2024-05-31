@@ -1,3 +1,6 @@
+import app
+from linebot.models import *
+
 # 問使用者是否允許取得位置的函數
 def ask_for_location_permission():
     # Rich menu JSON 結構
@@ -91,7 +94,13 @@ def request_location():
                 )
     return quick_reply
 
+def getnearby_recommendation(latitude, longitude):
+    # 使用 ChatGPT 來生成查詢字串
+    map_prompt = f"請列出經緯度 {latitude}, {longitude} 附近的五家餐酒館，格式如下：\n" \
+             f"1. 餐酒館名稱\n地址：餐酒館地址\nGoogle評分：評分\n"
+    
+    # 調用 ChatGPT 函式來處理查詢字串
+    map_recommendation = app.gpt4_message(map_prompt)
 
-# 發送 Rich Menu 給使用者
-    # message = FlexSendMessage(alt_text="Location Permission", contents=richmenu_json)
-    # line_bot_api.reply_message(reply_token, message)
+    return map_recommendation
+
