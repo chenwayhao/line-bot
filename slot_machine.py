@@ -1,5 +1,6 @@
 import random
 from linebot.models import *
+import app
 
 def image_carousel_template_message():
     fortunes = ['大吉', '吉', '凶', '大凶']
@@ -112,22 +113,25 @@ def buttons_template_message_mood():
     return mood_message
 
 
-# def get_recommendation(user_responses):
-#     response = user_responses.get(user_id, {})
-#     fortune = response.get('fortune', 'unknown')
-#     weather = response.get('weather', 'unknown')
-#     mood = response.get('mood', 'unknown')
+user_responses = {}
+def get_recommendation(user_id):
+    response = user_responses.get(user_id, {})
+    fortune = response.get('fortune', 'unknown')
+    weather = response.get('weather', 'unknown')
+    mood = response.get('mood', 'unknown')
 
-#     print(fortune, weather, mood)
+    print(fortune, weather, mood)
 
 
-#     # Generate a prompt for ChatGPT
-#     prompt = (
-#         f"基於以下條件，給出一個夜生活推薦：\n"
-#         f"運勢：{fortune}\n"
-#         f"天氣：{weather}\n"
-#         f"心情：{mood}\n"
-#         f"請給出一個適合的行程，1. 夜生活 、2.酒吧、3. KTV唱歌、4. 夜店。並且推薦一個台北適合的地點。請利用20字以內說明 1. 適合的行程 2. 地點 3. 地點的 google map 連結(https://www.google.com/maps/search/店名)"
-#     )
+    # Generate a prompt for ChatGPT
+    prompt = (
+        f"基於以下條件，給出一個夜生活推薦：\n"
+        f"運勢：{fortune}\n"
+        f"天氣：{weather}\n"
+        f"心情：{mood}\n"
+        f"請給出一個適合的行程，1. 夜生活 、2.酒吧、3. KTV唱歌、4. 夜店。並且推薦一個台北適合的地點。請利用20字以內說明 1. 適合的行程 2. 地點 3. 地點的 google map 連結(https://www.google.com/maps/search/店名)"
+    )
 
-#     return prompt
+    recommendation = app.gpt35_message(prompt)
+
+    return recommendation

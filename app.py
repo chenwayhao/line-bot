@@ -64,8 +64,7 @@ def handle_postback(event):
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '請點選分享位置', quick_reply = location_message))
 
     elif data == "不允許":
-        reply_text = "您已選擇不允許我們使用您的位置。"
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text = "您已選擇不允許我們使用您的位置。"))
 # Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
@@ -193,15 +192,13 @@ def get_recommendation(user_id):
 #     line_bot_api.reply_message(reply_token, message)
 
 # Function to request location from the user
-def request_location():
-    # message = TextSendMessage(text="請點選左下角分享位置。")
-    # line_bot_api.reply_message(reply_token, message)
-    quick_reply = QuickReply(
-                    items=[
-                        QuickReplyButton(action = LocationAction(label="發送位置"))
-                    ]
-                )
-    return quick_reply
+# def request_location():
+#     quick_reply = QuickReply(
+#                     items=[
+#                         QuickReplyButton(action = LocationAction(label="分享位置"))
+#                     ]
+#                 )
+#     return quick_reply
 
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location_message(event):

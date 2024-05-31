@@ -83,6 +83,15 @@ def ask_for_location_permission():
     }
     return richmenu_json
 
+def request_location():
+    quick_reply = QuickReply(
+                    items=[
+                        QuickReplyButton(action = LocationAction(label="分享位置"))
+                    ]
+                )
+    return quick_reply
+
+
 # 發送 Rich Menu 給使用者
     # message = FlexSendMessage(alt_text="Location Permission", contents=richmenu_json)
     # line_bot_api.reply_message(reply_token, message)
