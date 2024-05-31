@@ -75,8 +75,9 @@ def handle_message(event):
     
     elif re.match('附近美食', message):
         prelocation = nearby_restaurant.ask_for_location_permission()
-        prelocation_message = FlexSendMessage(alt_text="Location Permission", contents = prelocation)
-        line_bot_api.reply_message(event.reply_token, prelocation_message)
+        line_bot_api.push_message(prelocation)
+        # prelocation_message = FlexSendMessage(alt_text="Location Permission", contents = prelocation)
+        # line_bot_api.reply_message(event.reply_token, prelocation_message)
     
     elif re.match('越夜越嗨', message):
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '越夜越嗨'))
