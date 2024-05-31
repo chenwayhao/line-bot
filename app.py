@@ -119,7 +119,7 @@ def handle_location_message(event):
         column = CarouselColumn(
             thumbnail_image_url=thumbnail_image_url,
             title=name,
-            text=f"Rating: {rating}\n{address}",
+            text=f"Rating: {rating}",
             actions=[
                 {
                     "type": "uri",
