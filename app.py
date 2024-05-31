@@ -80,17 +80,10 @@ def handle_message(event):
         prelocation_message = FlexSendMessage(alt_text="Location Permission", contents = prelocation)
         line_bot_api.reply_message(event.reply_token, prelocation_message)
     
+    elif re.match('越夜越嗨', message):
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '越夜越嗨'))
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt35_message(message)))
-
-# Function to request location from the user
-# def request_location():
-#     quick_reply = QuickReply(
-#                     items=[
-#                         QuickReplyButton(action = LocationAction(label="分享位置"))
-#                     ]
-#                 )
-#     return quick_reply
 
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location_message(event):
@@ -100,9 +93,6 @@ def handle_location_message(event):
 
     template_message = nearby_restaurant.get_restaurant(latitude, longitude, google_maps_apikey)
     line_bot_api.reply_message(event.reply_token, template_message)
-    # 直接調用 ChatGPT 函式來生成回覆訊息
-    # reply_text = nearby_restaurant.getnearby_recommendation(latitude, longitude)
-    # line_bot_api.reply_message(event.reply_token, TextSendMessage(text = reply_text))
 
 
 def gpt4_message(message):
@@ -128,6 +118,7 @@ def gpt35_message(message):
     gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
 
     return gpt_reply
+
 
 import os
 if __name__ == "__main__":

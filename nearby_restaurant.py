@@ -113,6 +113,7 @@ def get_restaurant(latitude, longitude, google_maps_apikey):
     response = requests.get(url)
     results = response.json().get('results', [])
 
+    
 
     columns = []
     for result in results[:10]:  # Show up to 10 results
