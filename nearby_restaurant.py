@@ -105,7 +105,7 @@ def getnearby_recommendation(latitude, longitude):
         f'1. 餐廳名稱 2. 餐廳地址 3. 餐廳 google map 評分'
     )
     # 調用 ChatGPT 函式來處理查詢字串
-    map_recommendation = app.gpt4_message(prompt)
+    map_recommendation = app.gpt35_message(prompt)
 
     return map_recommendation
 
