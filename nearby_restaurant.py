@@ -6,115 +6,115 @@ from linebot.models import *
 # 問使用者是否允許取得位置的函數
 def ask_for_location_permission():
     # Rich menu JSON 結構
-    # richmenu_json = {
-    #     "type": "bubble",
-    #     "hero": {
-    #         "type": "image",
-    #         "url": "https://media.istockphoto.com/id/1421460958/photo/hand-of-young-woman-searching-location-in-map-online-on-smartphone.jpg?s=612x612&w=0&k=20&c=Kw8yHXSKmEhfjJVscY51Zob6IRjof0N2wmj2zp2-iRI=",
-    #         "size": "full",
-    #         "aspectRatio": "20:13",
-    #         "aspectMode": "cover",
-    #         "action": {
-    #             "type": "uri",
-    #             "uri": "https://line.me/"
-    #         },
-    #         "align": "center"
-    #     },
-    #     "body": {
-    #         "type": "box",
-    #         "layout": "vertical",
-    #         "contents": [
-    #             {
-    #                 "type": "box",
-    #                 "layout": "vertical",
-    #                 "margin": "lg",
-    #                 "spacing": "sm",
-    #                 "contents": [
-    #                     {
-    #                         "type": "box",
-    #                         "layout": "baseline",
-    #                         "spacing": "sm",
-    #                         "contents": [
-    #                             {
-    #                                 "type": "text",
-    #                                 "text": "要允許『夜貓Fun生活』使用您的位置嗎?",
-    #                                 "wrap": True,
-    #                                 "color": "#666666",
-    #                                 "size": "sm",
-    #                                 "flex": 6,
-    #                                 "style": "italic",
-    #                                 "weight": "bold"
-    #                             }
-    #                         ]
-    #                     }
-    #                 ]
-    #             }
-    #         ]
-    #     },
-    #     "footer": {
-    #         "type": "box",
-    #         "layout": "vertical",
-    #         "spacing": "sm",
-    #         "contents": [
-    #             {
-    #                 "type": "button",
-    #                 "style": "link",
-    #                 "height": "sm",
-    #                 "action": {
-    #                     "type": "postback",
-    #                     "label": "允許",
-    #                     "data": "允許"
-    #                 }
-    #             },
-    #             {
-    #                 "type": "button",
-    #                 "style": "link",
-    #                 "height": "sm",
-    #                 "action": {
-    #                     "type": "postback",
-    #                     "label": "不允許",
-    #                     "data": "不允許"
-    #                 }
-    #             },
-    #             {
-    #                 "type": "box",
-    #                 "layout": "vertical",
-    #                 "contents": [],
-    #                 "margin": "sm"
-    #             }
-    #         ],
-    #         "flex": 0
-    #     }
-    # }
+    richmenu_json = {
+        "type": "bubble",
+        "hero": {
+            "type": "image",
+            "url": "https://media.istockphoto.com/id/1421460958/photo/hand-of-young-woman-searching-location-in-map-online-on-smartphone.jpg?s=612x612&w=0&k=20&c=Kw8yHXSKmEhfjJVscY51Zob6IRjof0N2wmj2zp2-iRI=",
+            "size": "full",
+            "aspectRatio": "20:13",
+            "aspectMode": "cover",
+            "action": {
+                "type": "uri",
+                "uri": "https://line.me/"
+            },
+            "align": "center"
+        },
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+                {
+                    "type": "box",
+                    "layout": "vertical",
+                    "margin": "lg",
+                    "spacing": "sm",
+                    "contents": [
+                        {
+                            "type": "box",
+                            "layout": "baseline",
+                            "spacing": "sm",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "要允許『夜貓Fun生活』使用您的位置嗎?",
+                                    "wrap": True,
+                                    "color": "#666666",
+                                    "size": "sm",
+                                    "flex": 6,
+                                    "style": "italic",
+                                    "weight": "bold"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "footer": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "contents": [
+                {
+                    "type": "button",
+                    "style": "link",
+                    "height": "sm",
+                    "action": {
+                        "type": "postback",
+                        "label": "允許",
+                        "data": "允許"
+                    }
+                },
+                {
+                    "type": "button",
+                    "style": "link",
+                    "height": "sm",
+                    "action": {
+                        "type": "postback",
+                        "label": "不允許",
+                        "data": "不允許"
+                    }
+                },
+                {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [],
+                    "margin": "sm"
+                }
+            ],
+            "flex": 0
+        }
+    }
     
-    richmenu_json = RichMenu(
-        size=RichMenuSize(width=2500, height=1686),
-        selected=False,
-        name="Location Permission",
-        chat_bar_text="Tap to open",
-        areas=[
-            RichMenuArea(
-                bounds=RichMenuBounds(x=0, y=0, width=2500, height=850),
-                action=URIAction(
-                    uri="https://line.me/"
-                )
-            ),
-            RichMenuArea(
-                bounds=RichMenuBounds(x=0, y=810, width=2500, height=438),
-                action=PostbackAction(
-                    text="允許",
-                    data="允許"
-                )
-            ),
-            RichMenuArea(
-                bounds=RichMenuBounds(x=0, y=1248, width=2500, height=438),
-                action=PostbackAction(
-                    text="不允許",
-                    data="不允許"
-                )
-            )
-        ]
-    )
+    # richmenu_json = RichMenu(
+    #     size=RichMenuSize(width=2500, height=1686),
+    #     selected=False,
+    #     name="Location Permission",
+    #     chat_bar_text="Tap to open",
+    #     areas=[
+    #         RichMenuArea(
+    #             bounds=RichMenuBounds(x=0, y=0, width=2500, height=850),
+    #             action=URIAction(
+    #                 uri="https://line.me/"
+    #             )
+    #         ),
+    #         RichMenuArea(
+    #             bounds=RichMenuBounds(x=0, y=810, width=2500, height=438),
+    #             action=PostbackAction(
+    #                 text="允許",
+    #                 data="允許"
+    #             )
+    #         ),
+    #         RichMenuArea(
+    #             bounds=RichMenuBounds(x=0, y=1248, width=2500, height=438),
+    #             action=PostbackAction(
+    #                 text="不允許",
+    #                 data="不允許"
+    #             )
+    #         )
+    #     ]
+    # )
     
     return richmenu_json
 
