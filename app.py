@@ -55,141 +55,33 @@ def handle_postback(event):
     elif 'mood_action=' in data:
         mood = data.split('=')[1]
         user_responses[user_id]['mood'] = mood
-        recommendation = get_recommendation(user_id)
+        recommendation = slot_machine.get_recommendation(user_id)
         line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
         print(mood)
     
     elif data == "允許":
-        location_message = request_location()
+        location_message = nearby_restaurant.request_location()
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '請點選分享位置', quick_reply = location_message))
 
     elif data == "不允許":
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text = "您已選擇不允許我們使用您的位置。"))
+
 # Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = event.message.text
+    
     if re.match('當日選配', message):
         carousel_message = slot_machine.image_carousel_template_message()
         line_bot_api.reply_message(event.reply_token, carousel_message)
+    
     elif re.match('附近美食', message):
         prelocation = nearby_restaurant.ask_for_location_permission()
         prelocation_message = FlexSendMessage(alt_text="Location Permission", contents = prelocation)
         line_bot_api.reply_message(event.reply_token, prelocation_message)
+    
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt35_message(message)))
-
-def get_recommendation(user_id):
-    response = user_responses.get(user_id, {})
-    fortune = response.get('fortune', 'unknown')
-    weather = response.get('weather', 'unknown')
-    mood = response.get('mood', 'unknown')
-
-    print(fortune, weather, mood)
-
-
-    # Generate a prompt for ChatGPT
-    prompt = (
-        f"基於以下條件，給出一個夜生活推薦：\n"
-        f"運勢：{fortune}\n"
-        f"天氣：{weather}\n"
-        f"心情：{mood}\n"
-        f"請給出一個適合的行程，1. 夜生活 、2.酒吧、3. KTV唱歌、4. 夜店。並且推薦一個台北適合的地點。請利用20字以內說明 1. 適合的行程 2. 地點 3. 地點的 google map 連結(https://www.google.com/maps/search/店名)"
-    )
-
-    recommendation = gpt35_message(prompt)
-
-    return recommendation
-
-
-# 問使用者是否允許取得位置的函數
-# def ask_for_location_permission(reply_token):
-#     # Rich menu JSON 結構
-#     richmenu_json = {
-#         "type": "bubble",
-#         "hero": {
-#             "type": "image",
-#             "url": "https://media.istockphoto.com/id/1421460958/photo/hand-of-young-woman-searching-location-in-map-online-on-smartphone.jpg?s=612x612&w=0&k=20&c=Kw8yHXSKmEhfjJVscY51Zob6IRjof0N2wmj2zp2-iRI=",
-#             "size": "full",
-#             "aspectRatio": "20:13",
-#             "aspectMode": "cover",
-#             "action": {
-#                 "type": "uri",
-#                 "uri": "https://line.me/"
-#             },
-#             "align": "center"
-#         },
-#         "body": {
-#             "type": "box",
-#             "layout": "vertical",
-#             "contents": [
-#                 {
-#                     "type": "box",
-#                     "layout": "vertical",
-#                     "margin": "lg",
-#                     "spacing": "sm",
-#                     "contents": [
-#                         {
-#                             "type": "box",
-#                             "layout": "baseline",
-#                             "spacing": "sm",
-#                             "contents": [
-#                                 {
-#                                     "type": "text",
-#                                     "text": "要允許『夜貓Fun生活』使用您的位置嗎?",
-#                                     "wrap": True,
-#                                     "color": "#666666",
-#                                     "size": "sm",
-#                                     "flex": 6,
-#                                     "style": "italic",
-#                                     "weight": "bold"
-#                                 }
-#                             ]
-#                         }
-#                     ]
-#                 }
-#             ]
-#         },
-#         "footer": {
-#             "type": "box",
-#             "layout": "vertical",
-#             "spacing": "sm",
-#             "contents": [
-#                 {
-#                     "type": "button",
-#                     "style": "link",
-#                     "height": "sm",
-#                     "action": {
-#                         "type": "postback",
-#                         "label": "允許",
-#                         "data": "允許"
-#                     }
-#                 },
-#                 {
-#                     "type": "button",
-#                     "style": "link",
-#                     "height": "sm",
-#                     "action": {
-#                         "type": "postback",
-#                         "label": "不允許",
-#                         "data": "不允許"
-#                     }
-#                 },
-#                 {
-#                     "type": "box",
-#                     "layout": "vertical",
-#                     "contents": [],
-#                     "margin": "sm"
-#                 }
-#             ],
-#             "flex": 0
-#         }
-#     }
-
-
-# # 發送 Rich Menu 給使用者
-#     message = FlexSendMessage(alt_text="Location Permission", contents=richmenu_json)
-#     line_bot_api.reply_message(reply_token, message)
 
 # Function to request location from the user
 # def request_location():
