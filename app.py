@@ -1,12 +1,13 @@
-from flask import Flask, request, abort
+from flask import Flask, request, abort, jsonify
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
 import os
 import openai
 import re 
-import random
 import slot_machine, nearby_restaurant
+import googlemaps
+
 
 
 
@@ -15,7 +16,7 @@ app = Flask(__name__)
 line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
 handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 openai.api_key = os.getenv('OPENAI_API_KEY')
-
+google_maps_apikey = os.getenv('GOOGLE_PLACES_APIKEY')
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -96,35 +97,15 @@ def handle_message(event):
 def handle_location_message(event):
     latitude = event.message.latitude
     longitude = event.message.longitude
-    user_id = event.source.user_id
     print(latitude, longitude)
     
+    url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={latitude},{longitude}&radius=1000&type=restaurant&key={google_maps_apikey}"
+    response = requests.get(url)
+    results = response.json().get('results', [])
+
     # 直接調用 ChatGPT 函式來生成回覆訊息
-    # reply_text = nearby_restaurant.getnearby_recommendation(latitude, longitude)
-
-    google_maps_url = f'https://www.google.com/maps/search/?api=1&query={latitude},{longitude}'
-
-    buttons_template = ButtonsTemplate(
-        title='查看地圖',
-        text='點擊下方按鈕查看地圖',
-        actions=[
-            URITemplateAction(
-                label='打開地圖',
-                uri=google_maps_url
-            )
-        ]
-    )
-
-    template_message = TemplateSendMessage(
-            alt_text='查看地圖',
-            template=buttons_template
-        )
-
-    line_bot_api.push_message(user_id, template_message)
-    
-    # 回覆用戶
-    # line_bot_api.reply_message(event.reply_token, TextSendMessage(text = reply_text))
-
+    reply_text = nearby_restaurant.getnearby_recommendation(latitude, longitude)
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text = reply_text))
 
 # def get_bars_from_chatgpt(latitude, longitude):
 #     # 使用 ChatGPT 來生成查詢字串
