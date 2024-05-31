@@ -102,12 +102,14 @@ def ask_for_location_permission():
             RichMenuArea(
                 bounds=RichMenuBounds(x=0, y=850, width=1250, height=836),
                 action=PostbackAction(
+                    text="允許",
                     data="允許"
                 )
             ),
             RichMenuArea(
                 bounds=RichMenuBounds(x=1250, y=850, width=1250, height=836),
                 action=PostbackAction(
+                    text="不允許",
                     data="不允許"
                 )
             )
