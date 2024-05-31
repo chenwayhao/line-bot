@@ -112,7 +112,7 @@ def handle_location_message(event):
         
         photo_reference = result.get('photos', [{}])[0].get('photo_reference')
         if photo_reference:
-            thumbnail_image_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference={photo_reference}&key={google_maps_api_key}"
+            thumbnail_image_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference={photo_reference}&key={google_maps_apikey}"
         else:
             thumbnail_image_url = "https://via.placeholder.com/800x400?text=No+Image"
 
