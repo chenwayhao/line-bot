@@ -7,7 +7,7 @@ import openai
 import re 
 import slot_machine, nearby_restaurant
 import requests
-
+import urllib.parse
 
 
 app = Flask(__name__)
