@@ -122,7 +122,6 @@ def get_restaurant(latitude, longitude, google_maps_apikey):
         place_id = result.get('place_id')
 
         encoded_name = urllib.parse.quote(name)
-        print(encoded_name)
         maps_url = f"https://www.google.com/maps/place/?q={encoded_name}"
         
         photo_reference = result.get('photos', [{}])[0].get('photo_reference')
