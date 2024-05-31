@@ -108,7 +108,7 @@ def handle_location_message(event):
         address = result.get('vicinity')
         rating = result.get('rating', 'N/A')
         place_id = result.get('place_id')
-        maps_url = f"https://www.google.com/maps/place/?q=place_id:{place_id}"
+        maps_url = f"https://www.google.com/maps/place/?q=place_id:{name}"
         
         photo_reference = result.get('photos', [{}])[0].get('photo_reference')
         if photo_reference:
@@ -119,7 +119,7 @@ def handle_location_message(event):
         column = CarouselColumn(
             thumbnail_image_url=thumbnail_image_url,
             title=name,
-            text=f"評分: {rating}",
+            text=f"評分: {rating}\n 地址：{address}",
             actions=[
                 {
                     "type": "uri",
