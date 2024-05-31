@@ -5,9 +5,7 @@ from linebot.models import *
 import os
 import openai
 import re 
-import slot_machine, nearby_restaurant
-# import requests
-# import urllib.parse
+import slot_machine, nearby_restaurant, nightclub
 
 
 app = Flask(__name__)
