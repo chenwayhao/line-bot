@@ -108,7 +108,10 @@ def handle_location_message(event):
         address = result.get('vicinity')
         rating = result.get('rating', 'N/A')
         place_id = result.get('place_id')
-        maps_url = f"https://www.google.com/maps/place/?q=name:{name}"
+
+        encoded_name = urllib.parse.quote(name)
+        print(encoded_name)
+        maps_url = f"https://www.google.com/maps/place/?q={encoded_name}"
         
         photo_reference = result.get('photos', [{}])[0].get('photo_reference')
         if photo_reference:
