@@ -98,7 +98,7 @@ def handle_location_message(event):
     longitude = event.message.longitude
     print(latitude, longitude)
     
-    url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={latitude},{longitude}&radius=1000&type=restaurant&key={google_maps_apikey}"
+    url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={latitude},{longitude}&radius=1000&type=restaurant&language=zh-TW&key={google_maps_apikey}"
     response = requests.get(url)
     results = response.json().get('results', [])
 
@@ -119,7 +119,7 @@ def handle_location_message(event):
         column = CarouselColumn(
             thumbnail_image_url=thumbnail_image_url,
             title=name,
-            text=f"Rating: {rating}",
+            text=f"評分: {rating}",
             actions=[
                 {
                     "type": "uri",
