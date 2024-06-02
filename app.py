@@ -93,8 +93,6 @@ def handle_message(event):
         prelocation = ask_for_location_permission()
         prelocation_message = FlexSendMessage(alt_text="Location Permission", contents = prelocation)
         line_bot_api.reply_message(event.reply_token, prelocation_message)
-        activity = 'restaurant'
-        return activity
 
     def nearby_hotel():
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '越夜越嗨'))
