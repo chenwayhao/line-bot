@@ -82,7 +82,7 @@ def handle_postback(event):
 
 # Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
-def handle_message(message, event):
+def handle_message(event):
     message = event.message.text
     
     def today_selection():
