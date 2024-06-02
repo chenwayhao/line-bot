@@ -85,31 +85,64 @@ def handle_postback(event):
 def handle_message(event):
     message = event.message.text
     
-    if re.match('當日選配', message):
+    def today_selection():
         carousel_message = slot_machine.image_carousel_template_message()
         line_bot_api.reply_message(event.reply_token, carousel_message)
-    
-    elif re.match('附近美食', message):
+
+    def nearby_food():
         prelocation = ask_for_location_permission()
         prelocation_message = FlexSendMessage(alt_text="Location Permission", contents = prelocation)
         line_bot_api.reply_message(event.reply_token, prelocation_message)
-    
-    elif re.match('越夜越嗨', message):
+        activity = 'restaurant'
+        return activity
+
+    def nearby_hotel():
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '越夜越嗨'))
-    
-    elif re.match('不醉不歸', message):
+
+    def shot_selection():
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '不醉不歸'))
-    
-    else:
+
+    def default():
         line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt35_message(message)))
+
+    action_map = {
+        '當日選配':today_selection,
+        '附近美食':nearby_food,
+        '越夜越嗨':nearby_hotel,
+        '不醉不歸':shot_selection
+    }
+
+    for pattern, handler in action_map.items():
+        if re.match(pattern, message):
+            handler()
+            break
+        else:
+            default()
+
+    # if re.match('當日選配', message):
+    #     carousel_message = slot_machine.image_carousel_template_message()
+    #     line_bot_api.reply_message(event.reply_token, carousel_message)
+    
+    # elif re.match('附近美食', message):
+    #     prelocation = ask_for_location_permission()
+    #     prelocation_message = FlexSendMessage(alt_text="Location Permission", contents = prelocation)
+    #     line_bot_api.reply_message(event.reply_token, prelocation_message)
+    
+    # elif re.match('越夜越嗨', message):
+    #     line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '越夜越嗨'))
+    
+    # elif re.match('不醉不歸', message):
+    #     line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '不醉不歸'))
+    
+    # else:
+    #     line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt35_message(message)))
 
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location_message(event):
     latitude = event.message.latitude
     longitude = event.message.longitude
     print(latitude, longitude)
-
-    template_message = get_googledata(latitude, longitude, google_maps_apikey, activity='restaurant')
+    template_message = get_googledata(latitude, longitude, google_maps_apikey)
     line_bot_api.reply_message(event.reply_token, template_message)
 
 # 問使用者是否允許取得位置的函數
