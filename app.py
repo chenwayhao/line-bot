@@ -104,15 +104,15 @@ def handle_message(message, event):
         line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt35_message(message)))
 
     action_map = {
-        '當日選配':today_selection,
-        '附近美食':nearby_food,
-        '越夜越嗨':nearby_hotel,
-        '不醉不歸':shot_selection
+        '當日選配': today_selection,
+        '附近美食': nearby_food,
+        '越夜越嗨': nearby_hotel,
+        '不醉不歸': shot_selection
     }
 
-    for pattern, handler in action_map.items():
+    for pattern, function in action_map.items():
         if re.match(pattern, message):
-            handler()
+            function()
             break
     else:
         default()
