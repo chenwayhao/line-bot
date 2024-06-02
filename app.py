@@ -84,12 +84,14 @@ def handle_postback(event):
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = event.message.text
-    
+    user_id = event.source.user_id
+
     def today_selection():
         carousel_message = slot_machine.image_carousel_template_message()
         line_bot_api.reply_message(event.reply_token, carousel_message)
 
     def nearby_food():
+        user_responses[user_id] = {'activity': 'restaurant'}
         prelocation = ask_for_location_permission()
         prelocation_message = FlexSendMessage(alt_text="Location Permission", contents = prelocation)
         line_bot_api.reply_message(event.reply_token, prelocation_message)
@@ -138,10 +140,13 @@ def handle_message(event):
 
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location_message(event):
+    user_id = event.source.user_id
+    response = user_responses.get(user_id, {})
+    activity = response.get('activity', 'unknown')
     latitude = event.message.latitude
     longitude = event.message.longitude
     print(latitude, longitude)
-    template_message = get_googledata(latitude, longitude, google_maps_apikey)
+    template_message = get_googledata(latitude, longitude, google_maps_apikey, activity)
     line_bot_api.reply_message(event.reply_token, template_message)
 
 # 問使用者是否允許取得位置的函數
@@ -242,8 +247,6 @@ def get_googledata(latitude, longitude, google_maps_apikey, activity):
     url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={latitude},{longitude}&radius=1000&type={activity}&language=zh-TW&key={google_maps_apikey}"
     response = requests.get(url)
     results = response.json().get('results', [])
-
-
 
     columns = []
     for result in results[:10]:  # Show up to 10 results
