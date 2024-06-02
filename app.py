@@ -36,26 +36,26 @@ def handle_postback(event):
     # Log the response
     if user_id not in user_responses:
         user_responses[user_id] = {} 
-    if 'fortune_action=' in data:
-        fortune = data.split('=')[1]
-        user_responses[user_id]['fortune'] = fortune
-        print(fortune)
-        weather_message = slot_machine.buttons_template_message_weather()
-        line_bot_api.push_message(user_id, weather_message)
+    # if 'fortune_action=' in data:
+    #     fortune = data.split('=')[1]
+    #     user_responses[user_id]['fortune'] = fortune
+    #     print(fortune)
+    #     weather_message = slot_machine.buttons_template_message_weather()
+    #     line_bot_api.push_message(user_id, weather_message)
 
-    elif 'weather_action=' in data:
-        weather = data.split('=')[1]
-        user_responses[user_id]['weather'] = weather
-        print(weather)
-        mood_message = slot_machine.buttons_template_message_mood()
-        line_bot_api.push_message(user_id, mood_message)
+    # elif 'weather_action=' in data:
+    #     weather = data.split('=')[1]
+    #     user_responses[user_id]['weather'] = weather
+    #     print(weather)
+    #     mood_message = slot_machine.buttons_template_message_mood()
+    #     line_bot_api.push_message(user_id, mood_message)
         
-    elif 'mood_action=' in data:
-        mood = data.split('=')[1]
-        user_responses[user_id]['mood'] = mood
-        recommendation = slot_machine.getslots_recommendation(user_id)
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
-        print(mood)
+    # elif 'mood_action=' in data:
+    #     mood = data.split('=')[1]
+    #     user_responses[user_id]['mood'] = mood
+    #     recommendation = slot_machine.getslots_recommendation(user_id)
+    #     line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
+    #     print(mood)
     
     elif data == "允許":
         location_message = nearby_restaurant.request_location()
@@ -63,6 +63,30 @@ def handle_postback(event):
 
     elif data == "不允許":
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text = "您已選擇不允許我們使用您的位置。"))
+
+    def fortune_action():
+        fortune = data.split('=')[1]
+        user_responses[user_id]['fortune'] = fortune
+        print(fortune)
+        weather_message = slot_machine.buttons_template_message_weather()
+        line_bot_api.push_message(user_id, weather_message)
+
+
+
+    action_map = {
+        'fortune_action=': fortune_action,
+        'weather_action=': weather_action,
+        'mood_action=': mood_action
+    }
+
+
+    for action_key in action_map:
+        if action_key in data:
+            action_map[action_key]()
+            break
+
+
+
 
 # Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
@@ -74,9 +98,7 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, carousel_message)
     
     elif re.match('附近美食', message):
-        # user_id = event.source.user_id
         prelocation = nearby_restaurant.ask_for_location_permission()
-        # line_bot_api.push_message(user_id, TextSendMessage(prelocation))
         prelocation_message = FlexSendMessage(alt_text="Location Permission", contents = prelocation)
         line_bot_api.reply_message(event.reply_token, prelocation_message)
     
