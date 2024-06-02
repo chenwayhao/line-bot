@@ -300,7 +300,7 @@ def get_googledata(latitude, longitude, google_maps_apikey, activity):
     for place in places_data:
         gpt_input += f"名稱: {place['name']}, 地址: {place['address']}, 評分: {place['rating']}\n"
     
-    gpt_reply = app.gpt35_message(gpt_input)
+    gpt_reply = gpt4_message(gpt_input)
 
     sorted_places_data = parse_gpt_reply(gpt_reply, places_data)
 
