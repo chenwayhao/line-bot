@@ -82,8 +82,8 @@ def handle_postback(event):
 
 # Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    message = event.message.text
+def handle_message(message, event):
+    # message = event.message.text
     
     def today_selection():
         carousel_message = slot_machine.image_carousel_template_message()
@@ -116,6 +116,7 @@ def handle_message(event):
             break
         else:
             default()
+
 
     # if re.match('當日選配', message):
     #     carousel_message = slot_machine.image_carousel_template_message()
