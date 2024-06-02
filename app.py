@@ -96,7 +96,7 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, prelocation_message)
 
     def nearby_hotel():
-        user_responses[user_id] = {'activity': 'hotel'}
+        user_responses[user_id] = {'activity': 'lodging'}
         prelocation_message = prelocation()
         line_bot_api.reply_message(event.reply_token, prelocation_message)
 
