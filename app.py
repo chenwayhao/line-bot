@@ -80,6 +80,7 @@ def handle_postback(event):
             action_map[action_key]()
             break
 
+
 # Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
@@ -101,7 +102,7 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, prelocation_message)
 
     def shot_selection():
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '不醉不歸'))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '越夜越嗨'))
 
     def default():
         line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt35_message(message)))
@@ -109,8 +110,8 @@ def handle_message(event):
     action_map = {
         '當日選配': today_selection,
         '附近美食': nearby_food,
-        '越夜越嗨': nearby_hotel,
-        '不醉不歸': shot_selection
+        '不醉不歸': nearby_hotel,
+        '越夜越嗨': shot_selection
     }
 
     for pattern, function in action_map.items():
@@ -120,35 +121,10 @@ def handle_message(event):
     else:
         default()
 
-
-    # if re.match('當日選配', message):
-    #     carousel_message = slot_machine.image_carousel_template_message()
-    #     line_bot_api.reply_message(event.reply_token, carousel_message)
-    
-    # elif re.match('附近美食', message):
-    #     prelocation = ask_for_location_permission()
-    #     prelocation_message = FlexSendMessage(alt_text="Location Permission", contents = prelocation)
-    #     line_bot_api.reply_message(event.reply_token, prelocation_message)
-    
-    # elif re.match('越夜越嗨', message):
-    #     line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '越夜越嗨'))
-    
-    # elif re.match('不醉不歸', message):
-    #     line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '不醉不歸'))
-    
-    # else:
-    #     line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt35_message(message)))
-
-@handler.add(MessageEvent, message=LocationMessage)
-def handle_location_message(event):
-    user_id = event.source.user_id
-    response = user_responses.get(user_id, {})
-    activity = response.get('activity', 'unknown')
-    latitude = event.message.latitude
-    longitude = event.message.longitude
-    print(latitude, longitude)
-    template_message = get_googledata(latitude, longitude, google_maps_apikey, activity)
-    line_bot_api.reply_message(event.reply_token, template_message)
+def prelocation():
+    prelocation = ask_for_location_permission()
+    prelocation_message = FlexSendMessage(alt_text="Location Permission", contents = prelocation)
+    return prelocation_message
 
 # 問使用者是否允許取得位置的函數
 def ask_for_location_permission():
@@ -244,10 +220,17 @@ def request_location():
                 )
     return quick_reply
 
-def prelocation():
-    prelocation = ask_for_location_permission()
-    prelocation_message = FlexSendMessage(alt_text="Location Permission", contents = prelocation)
-    return prelocation_message
+@handler.add(MessageEvent, message=LocationMessage)
+def handle_location_message(event):
+    user_id = event.source.user_id
+    response = user_responses.get(user_id, {})
+    activity = response.get('activity', 'unknown')
+
+    latitude = event.message.latitude
+    longitude = event.message.longitude
+    print(latitude, longitude)
+    template_message = hotel.get_googledata(latitude, longitude, google_maps_apikey, activity)
+    line_bot_api.reply_message(event.reply_token, template_message)
 
 def get_googledata(latitude, longitude, google_maps_apikey, activity):
     url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={latitude},{longitude}&radius=1000&type={activity}&language=zh-TW&key={google_maps_apikey}"
@@ -284,11 +267,10 @@ def get_googledata(latitude, longitude, google_maps_apikey, activity):
         )
         columns.append(column)
     
-    print(columns)
     carousel_template = CarouselTemplate(columns=columns)
     template_message = TemplateSendMessage(alt_text=f'Nearby {activity}', template = carousel_template)
-    return template_message
 
+    return template_message
 
 def gpt4_message(message):
 
