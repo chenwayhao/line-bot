@@ -51,7 +51,7 @@ def get_googledata(latitude, longitude, google_maps_apikey, activity):
         column = CarouselColumn(
             thumbnail_image_url=thumbnail_image_url,
             title=name,
-            text=f"評分: {rating}\n地址：{address}",
+            text=f"評分: {rating}⭐\n地址：{address}",
             actions=[
                 {
                     "type": "uri",
@@ -68,8 +68,6 @@ def get_googledata(latitude, longitude, google_maps_apikey, activity):
     return template_message
 
 def parse_gpt_reply(gpt_reply, places_data):
-    # 解析 GPT-4 的回复并排序 places_data
-    # 假设 GPT-4 的回复格式为按顺序的地点名称列表
     place_names = gpt_reply.split('\n')
     sorted_places_data = []
     for name in place_names:
