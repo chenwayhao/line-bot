@@ -91,7 +91,8 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, carousel_message)
 
     def nearby_food():
-        user_responses[user_id] = {'activity': 'restaurant'}
+        # user_responses[user_id] = {'activity': 'restaurant'}
+        user_responses[user_id]['activity'] = 'restautant'
         prelocation = ask_for_location_permission()
         prelocation_message = FlexSendMessage(alt_text="Location Permission", contents = prelocation)
         line_bot_api.reply_message(event.reply_token, prelocation_message)
