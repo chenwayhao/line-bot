@@ -175,6 +175,7 @@ def get_restaurant(latitude, longitude, google_maps_apikey):
         )
         columns.append(column)
     
+    print(columns)
     carousel_template = CarouselTemplate(columns=columns)
     template_message = TemplateSendMessage(alt_text='Nearby Restaurants', template = carousel_template)
     return template_message

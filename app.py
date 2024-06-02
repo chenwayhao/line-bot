@@ -5,7 +5,7 @@ from linebot.models import *
 import os
 import openai
 import re 
-import slot_machine, nearby_restaurant, nightclub
+import slot_machine, nearby_restaurant, hotel
 
 
 app = Flask(__name__)
@@ -100,14 +100,10 @@ def handle_postback(event):
         '不允許':location_denied
     }
 
-
     for action_key in action_map:
         if action_key in data:
             action_map[action_key]()
             break
-
-
-
 
 # Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
