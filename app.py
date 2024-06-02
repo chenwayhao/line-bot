@@ -354,7 +354,7 @@ def gpt4_message(message):
         model='gpt-4-turbo',
         messages = [{"role":"user","content":message}],
         temperature = 0.5,
-        max_tokens = 150
+        max_tokens = 350
     )
 
     gpt_reply = response.choices[0]['message']['content'].replace('。','').strip()
