@@ -36,33 +36,6 @@ def handle_postback(event):
     # Log the response
     if user_id not in user_responses:
         user_responses[user_id] = {} 
-    # if 'fortune_action=' in data:
-    #     fortune = data.split('=')[1]
-    #     user_responses[user_id]['fortune'] = fortune
-    #     print(fortune)
-    #     weather_message = slot_machine.buttons_template_message_weather()
-    #     line_bot_api.push_message(user_id, weather_message)
-
-    # elif 'weather_action=' in data:
-    #     weather = data.split('=')[1]
-    #     user_responses[user_id]['weather'] = weather
-    #     print(weather)
-    #     mood_message = slot_machine.buttons_template_message_mood()
-    #     line_bot_api.push_message(user_id, mood_message)
-        
-    # elif 'mood_action=' in data:
-    #     mood = data.split('=')[1]
-    #     user_responses[user_id]['mood'] = mood
-    #     recommendation = slot_machine.getslots_recommendation(user_id)
-    #     line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
-    #     print(mood)
-    
-    # elif data == "允許":
-    #     location_message = nearby_restaurant.request_location()
-    #     line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '請點選分享位置', quick_reply = location_message))
-
-    # elif data == "不允許":
-    #     line_bot_api.reply_message(event.reply_token, TextSendMessage(text = "您已選擇不允許我們使用您的位置。"))
 
     def fortune_action():
         fortune = data.split('=')[1]
@@ -86,7 +59,7 @@ def handle_postback(event):
         print(mood)
 
     def location_approve():
-        location_message = nearby_restaurant.request_location()
+        location_message = request_location()
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '請點選分享位置', quick_reply = location_message))
     
     def location_denied():
@@ -115,12 +88,16 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, carousel_message)
     
     elif re.match('附近美食', message):
-        prelocation = nearby_restaurant.ask_for_location_permission()
+        prelocation = ask_for_location_permission()
         prelocation_message = FlexSendMessage(alt_text="Location Permission", contents = prelocation)
         line_bot_api.reply_message(event.reply_token, prelocation_message)
     
     elif re.match('越夜越嗨', message):
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '越夜越嗨'))
+    
+    elif re.match('不醉不歸', message):
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '不醉不歸'))
+    
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt35_message(message)))
 
@@ -132,6 +109,118 @@ def handle_location_message(event):
 
     template_message = nearby_restaurant.get_restaurant(latitude, longitude, google_maps_apikey)
     line_bot_api.reply_message(event.reply_token, template_message)
+
+# 問使用者是否允許取得位置的函數
+def ask_for_location_permission():
+    # Rich menu JSON 結構
+    richmenu_json = {
+        "type": "bubble",
+        "hero": {
+            "type": "image",
+            "url": "https://media.istockphoto.com/id/1421460958/photo/hand-of-young-woman-searching-location-in-map-online-on-smartphone.jpg?s=612x612&w=0&k=20&c=Kw8yHXSKmEhfjJVscY51Zob6IRjof0N2wmj2zp2-iRI=",
+            "size": "full",
+            "aspectRatio": "20:13",
+            "aspectMode": "cover",
+            "action": {
+                "type": "uri",
+                "uri": "https://line.me/"
+            },
+            "align": "center"
+        },
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+                {
+                    "type": "box",
+                    "layout": "vertical",
+                    "margin": "lg",
+                    "spacing": "sm",
+                    "contents": [
+                        {
+                            "type": "box",
+                            "layout": "baseline",
+                            "spacing": "sm",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "要允許『夜貓Fun生活』使用您的位置嗎?",
+                                    "wrap": True,
+                                    "color": "#666666",
+                                    "size": "sm",
+                                    "flex": 6,
+                                    "style": "italic",
+                                    "weight": "bold"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "footer": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "contents": [
+                {
+                    "type": "button",
+                    "style": "link",
+                    "height": "sm",
+                    "action": {
+                        "type": "postback",
+                        "label": "允許",
+                        "data": "允許"
+                    }
+                },
+                {
+                    "type": "button",
+                    "style": "link",
+                    "height": "sm",
+                    "action": {
+                        "type": "postback",
+                        "label": "不允許",
+                        "data": "不允許"
+                    }
+                },
+                {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [],
+                    "margin": "sm"
+                }
+            ],
+            "flex": 0
+        }
+    }
+    
+    return richmenu_json
+
+def request_location():
+    quick_reply = QuickReply(
+                    items=[
+                        QuickReplyButton(action = LocationAction(label="分享位置"))
+                    ]
+                )
+    return quick_reply
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def gpt4_message(message):
