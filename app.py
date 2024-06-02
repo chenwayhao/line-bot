@@ -57,12 +57,12 @@ def handle_postback(event):
     #     line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
     #     print(mood)
     
-    elif data == "允許":
-        location_message = nearby_restaurant.request_location()
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '請點選分享位置', quick_reply = location_message))
+    # elif data == "允許":
+    #     location_message = nearby_restaurant.request_location()
+    #     line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '請點選分享位置', quick_reply = location_message))
 
-    elif data == "不允許":
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text = "您已選擇不允許我們使用您的位置。"))
+    # elif data == "不允許":
+    #     line_bot_api.reply_message(event.reply_token, TextSendMessage(text = "您已選擇不允許我們使用您的位置。"))
 
     def fortune_action():
         fortune = data.split('=')[1]
@@ -71,12 +71,33 @@ def handle_postback(event):
         weather_message = slot_machine.buttons_template_message_weather()
         line_bot_api.push_message(user_id, weather_message)
 
+    def weather_action():
+        weather = data.split('=')[1]
+        user_responses[user_id]['weather'] = weather
+        print(weather)
+        mood_message = slot_machine.buttons_template_message_mood()
+        line_bot_api.push_message(user_id, mood_message)   
 
+    def mood_action():
+        mood = data.split('=')[1]
+        user_responses[user_id]['mood'] = mood
+        recommendation = slot_machine.getslots_recommendation(user_id)
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
+        print(mood)
+
+    def location_approve():
+        location_message = nearby_restaurant.request_location()
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '請點選分享位置', quick_reply = location_message))
+    
+    def location_denied():
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text = "您已選擇不允許我們使用您的位置。"))
 
     action_map = {
         'fortune_action=': fortune_action,
         'weather_action=': weather_action,
-        'mood_action=': mood_action
+        'mood_action=': mood_action,
+        '允許': location_approve,
+        '不允許':location_denied
     }
 
 
