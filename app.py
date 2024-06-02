@@ -91,14 +91,14 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, carousel_message)
 
     def nearby_food():
-        # user_responses[user_id] = {'activity': 'restaurant'}
-        user_responses[user_id]['activity'] = 'restautant'
-        prelocation = ask_for_location_permission()
-        prelocation_message = FlexSendMessage(alt_text="Location Permission", contents = prelocation)
+        user_responses[user_id] = {'activity': 'restaurant'}
+        prelocation_message = prelocation()
         line_bot_api.reply_message(event.reply_token, prelocation_message)
 
     def nearby_hotel():
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '越夜越嗨'))
+        user_responses[user_id] = {'activity': 'hotel'}
+        prelocation_message = prelocation()
+        line_bot_api.reply_message(event.reply_token, prelocation_message)
 
     def shot_selection():
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '不醉不歸'))
@@ -243,6 +243,11 @@ def request_location():
                     ]
                 )
     return quick_reply
+
+def prelocation():
+    prelocation = ask_for_location_permission()
+    prelocation_message = FlexSendMessage(alt_text="Location Permission", contents = prelocation)
+    return prelocation_message
 
 def get_googledata(latitude, longitude, google_maps_apikey, activity):
     url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={latitude},{longitude}&radius=1000&type={activity}&language=zh-TW&key={google_maps_apikey}"
