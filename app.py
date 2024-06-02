@@ -229,7 +229,7 @@ def handle_location_message(event):
     latitude = event.message.latitude
     longitude = event.message.longitude
     print(latitude, longitude)
-    template_message = hotel.get_googledata(latitude, longitude, google_maps_apikey, activity)
+    template_message = get_googledata(latitude, longitude, google_maps_apikey, activity)
     line_bot_api.reply_message(event.reply_token, template_message)
 
 def get_googledata(latitude, longitude, google_maps_apikey, activity):
