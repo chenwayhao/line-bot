@@ -6,6 +6,8 @@ import os
 import openai
 import re 
 import slot_machine, nearby_restaurant, hotel
+import requests
+import urllib.parse
 
 
 app = Flask(__name__)
@@ -107,7 +109,7 @@ def handle_location_message(event):
     longitude = event.message.longitude
     print(latitude, longitude)
 
-    template_message = get_googledata(latitude, longitude, google_maps_apikey,activity='restaurant')
+    template_message = get_googledata(latitude, longitude, google_maps_apikey, activity='restaurant')
     line_bot_api.reply_message(event.reply_token, template_message)
 
 # 問使用者是否允許取得位置的函數
