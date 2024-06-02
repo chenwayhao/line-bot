@@ -11,9 +11,12 @@ def get_googledata(latitude, longitude, google_maps_apikey, activity):
     columns = []
     for result in results[:10]:  # Show up to 10 results
         name = result.get('name')
+        if len(name) > 40:
+            name = name[:37] + '...'
         address = result.get('vicinity')
         rating = result.get('rating', 'N/A')
         place_id = result.get('place_id')
+        
 
         encoded_name = urllib.parse.quote(name)
         maps_url = f"https://www.google.com/maps/place/?q={encoded_name}"
