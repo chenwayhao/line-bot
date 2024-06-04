@@ -1,4 +1,5 @@
 from linebot.models import *
+import app
 
 def baseOfalcohol():
     buttons_template_message = TemplateSendMessage(
@@ -81,7 +82,7 @@ def flavorOfalcohol():
                         "action": {
                             "type": "postback",
                             "label": "香甜的",
-                            "data": "action=flavor&value=香甜的"
+                            "data": "alcohol_action=flavor&value=香甜的"
                         }
                     },
                     {
@@ -90,7 +91,7 @@ def flavorOfalcohol():
                         "action": {
                             "type": "postback",
                             "label": "酸味的",
-                            "data": "action=flavor&value=酸味的"
+                            "data": "alcohol_action=flavor&value=酸味的"
                         }
                     },
                     {
@@ -99,7 +100,7 @@ def flavorOfalcohol():
                         "action": {
                             "type": "postback",
                             "label": "濃烈的",
-                            "data": "action=flavor&value=濃烈的"
+                            "data": "alcohol_action=flavor&value=濃烈的"
                         }
                     },
                     {
@@ -125,3 +126,24 @@ def flavorOfalcohol():
         }
     )
     return flex_message
+
+user_responses = {}
+def getalcohol_recommendation(user_id):
+    response = user_responses.get(user_id, {})
+    base = response.get('base', 'unknown')
+    preference = response.get('preference', 'unknown')
+    flavor = response.get('flavor', 'unknown')
+
+    # Generate a prompt for ChatGPT
+    prompt = (
+        f"基於以下條件，給出一個調酒推薦：\n"
+        f"基底：{base}\n"
+        f"偏好或限制：{preference}\n"
+        f"風味：{flavor}\n"
+        f"請給出一個適合的調酒推薦。"
+    )
+
+    recommendation = app.gpt35_message(prompt)
+
+    return recommendation
+

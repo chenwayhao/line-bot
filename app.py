@@ -78,6 +78,9 @@ def handle_postback(event):
             if 'flavor' not in user_responses[user_id]:
                 user_responses[user_id]['flavor'] = []
             user_responses[user_id]['flavor'].append(value)  # 將值添加到 flavor 列表中
+            recommendation = alcohol.getalcohol_recommendation(user_id)
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
+        
         else:
             user_responses[user_id][key] = value  # 將值添加到用戶的 responses 中
 
@@ -96,7 +99,7 @@ def handle_postback(event):
         'mood_action=': mood_action,
         '允許': location_approve,
         '不允許':location_denied,
-        'alcohol_action':alcohol_action
+        'alcohol_action=':alcohol_action
     }
 
     for action_key in action_map:
