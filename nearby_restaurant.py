@@ -97,56 +97,57 @@ from linebot.models import *
 #                 )
 #     return quick_reply
 
-def getnearby_recommendation(latitude, longitude):
+# def getnearby_recommendation(latitude, longitude):
 
 
-    prompt =( f'請列出經緯度{latitude},{longitude} 附近的五家餐酒館：'
-        f'(利用https://www.google.com/maps/search/bistro/@經緯度)'
-        f'1. 餐廳名稱 2. 餐廳地址 3. 餐廳 google map 評分'
-    )
-    # 調用 ChatGPT 函式來處理查詢字串
-    map_recommendation = app.gpt35_message(prompt)
+#     prompt =( f'請列出經緯度{latitude},{longitude} 附近的五家餐酒館：'
+#         f'(利用https://www.google.com/maps/search/bistro/@經緯度)'
+#         f'1. 餐廳名稱 2. 餐廳地址 3. 餐廳 google map 評分'
+#     )
+#     # 調用 ChatGPT 函式來處理查詢字串
+#     map_recommendation = app.gpt35_message(prompt)
 
-    return map_recommendation
+#     return map_recommendation
 
 # def get_restaurant(latitude, longitude, google_maps_apikey):
-    url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={latitude},{longitude}&radius=1000&type=restaurant&language=zh-TW&key={google_maps_apikey}"
-    response = requests.get(url)
-    results = response.json().get('results', [])
+#     url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={latitude},{longitude}&radius=1000&type=restaurant&language=zh-TW&key={google_maps_apikey}"
+#     response = requests.get(url)
+#     results = response.json().get('results', [])
 
 
 
-    columns = []
-    for result in results[:10]:  # Show up to 10 results
-        name = result.get('name')
-        address = result.get('vicinity')
-        rating = result.get('rating', 'N/A')
-        place_id = result.get('place_id')
+#     columns = []
+#     for result in results[:10]:  # Show up to 10 results
+#         name = result.get('name')
+#         address = result.get('vicinity')
+#         rating = result.get('rating', 'N/A')
+#         place_id = result.get('place_id')
 
-        encoded_name = urllib.parse.quote(name)
-        maps_url = f"https://www.google.com/maps/place/?q={encoded_name}"
+#         encoded_name = urllib.parse.quote(name)
+#         maps_url = f"https://www.google.com/maps/place/?q={encoded_name}"
         
-        photo_reference = result.get('photos', [{}])[0].get('photo_reference')
-        if photo_reference:
-            thumbnail_image_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference={photo_reference}&key={google_maps_apikey}"
-        else:
-            thumbnail_image_url = "https://via.placeholder.com/800x400?text=No+Image"
+#         photo_reference = result.get('photos', [{}])[0].get('photo_reference')
+#         if photo_reference:
+#             thumbnail_image_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference={photo_reference}&key={google_maps_apikey}"
+#         else:
+#             thumbnail_image_url = "https://via.placeholder.com/800x400?text=No+Image"
 
-        column = CarouselColumn(
-            thumbnail_image_url=thumbnail_image_url,
-            title=name,
-            text=f"評分: {rating}\n地址：{address}",
-            actions=[
-                {
-                    "type": "uri",
-                    "label": "View on Map",
-                    "uri": maps_url
-                }
-            ]
-        )
-        columns.append(column)
+#         column = CarouselColumn(
+#             thumbnail_image_url=thumbnail_image_url,
+#             title=name,
+#             text=f"評分: {rating}\n地址：{address}",
+#             actions=[
+#                 {
+#                     "type": "uri",
+#                     "label": "View on Map",
+#                     "uri": maps_url
+#                 }
+#             ]
+#         )
+#         columns.append(column)
     
-    print(columns)
-    carousel_template = CarouselTemplate(columns=columns)
-    template_message = TemplateSendMessage(alt_text='Nearby Restaurants', template = carousel_template)
-    return template_message
+#     print(columns)
+#     carousel_template = CarouselTemplate(columns=columns)
+#     template_message = TemplateSendMessage(alt_text='Nearby Restaurants', template = carousel_template)
+#     return template_message
+

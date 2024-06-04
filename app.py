@@ -5,7 +5,7 @@ from linebot.models import *
 import os
 import openai
 import re 
-import slot_machine, nearby_restaurant, hotel
+import slot_machine, nearby_restaurant, hotel, alcohol
 import requests
 import urllib.parse
 
@@ -67,12 +67,36 @@ def handle_postback(event):
     def location_denied():
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text = "您已選擇不允許我們使用您的位置。"))
 
+    def alcohol_action():
+        key_value = data.split('&')
+        key = key_value[0].split('=')[1]  # 提取 action 的值作為 key
+        value = key_value[1].split('=')[1]  # 提取 value 的值
+
+        # 如果 key 是 'flavor'，則需要處理多選
+        if key == 'flavor':
+            # 如果用戶沒有 flavor 記錄，則初始化一個空的列表
+            if 'flavor' not in user_responses[user_id]:
+                user_responses[user_id]['flavor'] = []
+            user_responses[user_id]['flavor'].append(value)  # 將值添加到 flavor 列表中
+        else:
+            user_responses[user_id][key] = value  # 將值添加到用戶的 responses 中
+
+        # 根據 key 的不同，提出不同的下一個問題
+        if key == 'base':
+            degreeOfalcohol = alcohol.degreeOfalcohol()  # 如果是基底問題，則詢問第二個問題
+            line_bot_api.push_message(user_id, degreeOfalcohol)
+        elif key == 'preference':
+            flavorOfalcohol = alcohol.flavorOfalcohol(user_id)  # 如果是偏好問題，則詢問第三個問題
+            line_bot_api.push_message(user_id, flavorOfalcohol)
+
+
     action_map = {
         'fortune_action=': fortune_action,
         'weather_action=': weather_action,
         'mood_action=': mood_action,
         '允許': location_approve,
-        '不允許':location_denied
+        '不允許':location_denied,
+        'alcohol_action':alcohol_action
     }
 
     for action_key in action_map:
@@ -102,7 +126,9 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, prelocation_message)
 
     def shot_selection():
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text = '越夜越嗨'))
+        baseOfalcohol = alcohol.baseOfalcohol()
+        line_bot_api.push_message(user_id, baseOfalcohol)
+
 
     def default():
         line_bot_api.reply_message(event.reply_token, TextSendMessage(gpt35_message(message)))
