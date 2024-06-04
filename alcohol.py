@@ -42,17 +42,17 @@ def degreeOfalcohol():
                 PostbackAction(
                     label='高度數酒品',
                     display_text='高度數酒品',
-                    data='action=preference&value=高度數酒品'
+                    data='alcohol_action=preference&value=高度數酒品'
                 ),
                 PostbackAction(
                     label='低度數酒品',
                     display_text='低度數酒品',
-                    data='action=preference&value=低度數酒品'
+                    data='alcohol_action=preference&value=低度數酒品'
                 ),
                 PostbackAction(
                     label='限制酒精攝入',
                     display_text='限制酒精攝入',
-                    data='action=preference&value=限制酒精攝入'
+                    data='alcohol_action=preference&value=限制酒精攝入'
                 )
             ]
         )
