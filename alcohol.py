@@ -32,7 +32,7 @@ def baseOfalcohol():
     )
     return buttons_template_message
 
-def degreeOfalcohol(user_id):
+def degreeOfalcohol():
     buttons_template_message = TemplateSendMessage(
         alt_text='請選擇您對特定成分或酒精度數的偏好或限制',
         template=ButtonsTemplate(
@@ -59,7 +59,7 @@ def degreeOfalcohol(user_id):
     )
     return buttons_template_message
 
-def flavorOfalcohol(user_id):
+def flavorOfalcohol():
     flex_message = FlexSendMessage(
         alt_text='請選擇您喜歡喝的調酒風味',
         contents={

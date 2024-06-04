@@ -86,7 +86,7 @@ def handle_postback(event):
             degreeOfalcohol = alcohol.degreeOfalcohol()  # 如果是基底問題，則詢問第二個問題
             line_bot_api.push_message(user_id, degreeOfalcohol)
         elif key == 'preference':
-            flavorOfalcohol = alcohol.flavorOfalcohol(user_id)  # 如果是偏好問題，則詢問第三個問題
+            flavorOfalcohol = alcohol.flavorOfalcohol()  # 如果是偏好問題，則詢問第三個問題
             line_bot_api.push_message(user_id, flavorOfalcohol)
 
 
