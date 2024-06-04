@@ -14,7 +14,7 @@ def image_carousel_template_message():
                     image_url='https://i.imgur.com/W7nI6fg.jpg',
                     action=PostbackAction(
                         label='請抽我看看運勢',
-                        # text='到底抽到什麼呢?',
+                        display_text='到底抽到什麼呢?',
                         data=f'fortune_action={fortunes[0]}'
                     )
                 ),
@@ -22,7 +22,7 @@ def image_carousel_template_message():
                     image_url='https://i.imgur.com/W7nI6fg.jpg',
                     action=PostbackAction(
                         label='請抽我看看運勢',
-                        # text='到底抽到什麼呢?',
+                        display_text='到底抽到什麼呢?',
                         data=f'fortune_action={fortunes[1]}'
                     )
                 ),
@@ -30,7 +30,7 @@ def image_carousel_template_message():
                     image_url='https://i.imgur.com/W7nI6fg.jpg',
                     action=PostbackAction(
                         label='請抽我看看運勢',
-                        # text='到底抽到什麼呢?',
+                        display_text='到底抽到什麼呢?',
                         data=f'fortune_action={fortunes[2]}'
                     )
                 ),
@@ -38,7 +38,7 @@ def image_carousel_template_message():
                     image_url='https://i.imgur.com/W7nI6fg.jpg',
                     action=PostbackAction(
                         label='請抽我看看運勢',
-                        # text='到底抽到什麼呢?',
+                        display_text='到底抽到什麼呢?',
                         data=f'action={fortunes[3]}'
                     )
                 )
@@ -59,22 +59,22 @@ def buttons_template_message_weather():
             actions=[
                 PostbackAction(
                     label='悶熱',
-                    # text='悶熱',
+                    display_text='悶熱',
                     data = f'weather_action={weather[0]}'
                 ),
                 PostbackAction(
                     label='濕冷',
-                    # text='濕冷',
+                    display_text='濕冷',
                     data = f'weather_action={weather[1]}'
                 ),
                 PostbackAction(
                     label='溫暖',
-                    # text='溫暖',
+                    display_text='溫暖',
                     data = f'weather_action={weather[2]}'
                 ),
                 PostbackAction(
                     label='涼爽',
-                    # text='涼爽',
+                    display_text='涼爽',
                     data = f'weather_action={weather[3]}'
                 )
             ]
@@ -94,17 +94,17 @@ def buttons_template_message_mood():
             actions=[
                 PostbackAction(
                     label='很好',
-                    # text='很好！',
+                    display_text='很好！',
                     data = f'mood_action={mood[0]}'
                 ),
                 PostbackAction(
                     label='不好不壞',
-                    # text='不好不壞！',
+                    display_text='不好不壞！',
                     data = f'mood_action={mood[1]}'
                 ),
                 PostbackAction(
                     label='很差',
-                    # text='很差！',
+                    display_text='很差！',
                     data = f'mood_action={mood[2]}'
                 )
             ]
