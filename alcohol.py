@@ -133,6 +133,7 @@ def getalcohol_recommendation(user_id):
     base = response.get('base', 'unknown')
     preference = response.get('preference', 'unknown')
     flavor = response.get('flavor', 'unknown')
+    print(base, preference, flavor)
 
     # Generate a prompt for ChatGPT
     prompt = (
