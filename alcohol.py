@@ -11,22 +11,22 @@ def baseOfalcohol():
                 PostbackAction(
                     label='烈酒基底',
                     display_text='烈酒基底',
-                    data='alcohol_action=base&value=烈酒基底'
+                    data='base_action=烈酒基底'
                 ),
                 PostbackAction(
                     label='葡萄酒基底',
                     display_text='葡萄酒基底',
-                    data='alcohol_action=base&value=葡萄酒基底'
+                    data='base_action=葡萄酒基底'
                 ),
                 PostbackAction(
                     label='啤酒基底',
                     display_text='啤酒基底',
-                    data='alcohol_action=base&value=啤酒基底'
+                    data='base_action=啤酒基底'
                 ),
                 PostbackAction(
                     label='利口酒基底',
                     display_text='利口酒基底',
-                    data='alcohol_action=base&value=利口酒基底'
+                    data='base_action=利口酒基底'
                 )
             ]
         )
@@ -43,17 +43,17 @@ def degreeOfalcohol():
                 PostbackAction(
                     label='高度數酒品',
                     display_text='高度數酒品',
-                    data='alcohol_action=preference&value=高度數酒品'
+                    data='preference_action=高度數酒品'
                 ),
                 PostbackAction(
                     label='低度數酒品',
                     display_text='低度數酒品',
-                    data='alcohol_action=preference&value=低度數酒品'
+                    data='preference_action=低度數酒品'
                 ),
                 PostbackAction(
                     label='限制酒精攝入',
                     display_text='限制酒精攝入',
-                    data='alcohol_action=preference&value=限制酒精攝入'
+                    data='preference_action=限制酒精攝入'
                 )
             ]
         )
@@ -82,7 +82,7 @@ def flavorOfalcohol():
                         "action": {
                             "type": "postback",
                             "label": "香甜的",
-                            "data": "alcohol_action=flavor&value=香甜的"
+                            "data": "flavor_action=香甜的"
                         }
                     },
                     {
@@ -91,7 +91,7 @@ def flavorOfalcohol():
                         "action": {
                             "type": "postback",
                             "label": "酸味的",
-                            "data": "alcohol_action=flavor&value=酸味的"
+                            "data": "flavor_action=酸味的"
                         }
                     },
                     {
@@ -100,7 +100,7 @@ def flavorOfalcohol():
                         "action": {
                             "type": "postback",
                             "label": "濃烈的",
-                            "data": "alcohol_action=flavor&value=濃烈的"
+                            "data": "flavor_action=濃烈的"
                         }
                     },
                     {
@@ -109,7 +109,7 @@ def flavorOfalcohol():
                         "action": {
                             "type": "postback",
                             "label": "清爽的",
-                            "data": "action=flavor&value=清爽的"
+                            "data": "flavor_action=清爽的"
                         }
                     },
                     {
@@ -118,7 +118,7 @@ def flavorOfalcohol():
                         "action": {
                             "type": "postback",
                             "label": "不知道，想嘗試新口味",
-                            "data": "action=flavor&value=不知道，想嘗試新口味"
+                            "data": "flavor_action=不知道，想嘗試新口味"
                         }
                     }
                 ]
@@ -133,6 +133,7 @@ def getalcohol_recommendation(user_id):
     base = response.get('base', 'unknown')
     preference = response.get('preference', 'unknown')
     flavor = response.get('flavor', 'unknown')
+    
     print(base, preference, flavor)
 
     # Generate a prompt for ChatGPT
