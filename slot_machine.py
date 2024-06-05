@@ -129,7 +129,7 @@ def getslots_recommendation(user_id):
         f"運勢：{fortune}\n"
         f"天氣：{weather}\n"
         f"心情：{mood}\n"
-        f"請給出一個適合的夜生活建議，要怎麼樣度過夜生活。可能的選項有: 1.酒吧喝酒、2. 去KTV唱歌、3. 去夜店 4. 去餐酒館吃飯。並且推薦一個台北適合的地址。請利用20字以內說明 1. 適合的行程 2. 地點 3. 地點的 google map 連結(https://www.google.com/maps/search/店名的空格以+代替並換行顯示)"
+        f"請給出一個適合的夜生活建議，要怎麼樣度過夜生活。可能的選項有: 1.酒吧喝酒、2. 去KTV唱歌、3. 去夜店 。並且推薦一個台北適合的地址。請利用20字以內說明 1. 適合的行程 2. 地點 3. 地點的 google map 連結(https://www.google.com/maps/search/店名的空格以+代替並換行顯示)"
     )
 
     recommendation = app.gpt35_message(prompt)
