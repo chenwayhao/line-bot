@@ -144,7 +144,7 @@ def getalcohol_recommendation(user_id):
         f"請給出一個適合的調酒推薦。"
     )
 
-    recommendation = app.gpt4_message(prompt)
+    recommendation = app.gpt35_message(prompt)
 
     return recommendation
 
