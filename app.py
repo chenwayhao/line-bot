@@ -5,7 +5,7 @@ from linebot.models import *
 import os
 import openai
 import re 
-import slot_machine, nearby_restaurant, hotel, alcohol
+import slot_machine, alcohol
 import requests
 import urllib.parse
 
