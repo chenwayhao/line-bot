@@ -113,8 +113,8 @@ def buttons_template_message_mood():
     return mood_message
 
 
-user_responses = {}
-def getslots_recommendation(user_id):
+# user_responses = {}
+def getslots_recommendation(user_id, user_responses):
     response = user_responses.get(user_id, {})
     fortune = response.get('fortune', 'unknown')
     weather = response.get('weather', 'unknown')
