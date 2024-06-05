@@ -56,7 +56,8 @@ def handle_postback(event):
     def mood_action():
         mood = data.split('=')[1]
         user_responses[user_id]['mood'] = mood
-        recommendation = slot_machine.getslots_recommendation(user_id)
+        response = user_responses.get(user_id, {})
+        recommendation = slot_machine.getslots_recommendation(response)
         line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
         print(mood)
 
