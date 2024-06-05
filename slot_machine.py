@@ -14,7 +14,7 @@ def image_carousel_template_message():
                     image_url='https://i.imgur.com/W7nI6fg.jpg',
                     action=PostbackAction(
                         label='請抽我看看運勢',
-                        display_text='您抽到的是:{fortunes[0]}?',
+                        display_text=f'您抽到的是:{fortunes[0]}?',
                         data=f'fortune_action={fortunes[0]}'
                     )
                 ),
