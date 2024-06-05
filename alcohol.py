@@ -128,7 +128,7 @@ def flavorOfalcohol():
     return flex_message
 
 user_responses = {}
-def getalcohol_recommendation(user_id):
+def getalcohol_recommendation(user_id, user_responses):
     response = user_responses.get(user_id, {})
     base = response.get('base', 'unknown')
     preference = response.get('preference', 'unknown')

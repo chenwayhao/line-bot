@@ -56,8 +56,8 @@ def handle_postback(event):
     def mood_action():
         mood = data.split('=')[1]
         user_responses[user_id]['mood'] = mood
-        response = user_responses.get(user_id, {})
-        recommendation = slot_machine.getslots_recommendation(response)
+        # response = user_responses.get(user_id, {})
+        recommendation = slot_machine.getslots_recommendation(user_id, user_responses)
         line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
         print(mood)
 
@@ -110,7 +110,7 @@ def handle_postback(event):
     def flavor_action():
         flavor = data.split('=')[1]
         user_responses[user_id]['flavor'] = flavor
-        recommendation = alcohol.getalcohol_recommendation(user_id)
+        recommendation = alcohol.getalcohol_recommendation(user_id, user_responses)
         line_bot_api.reply_message(event.reply_token, TextSendMessage(recommendation))
         print(flavor)
 
